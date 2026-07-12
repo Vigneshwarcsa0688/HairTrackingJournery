@@ -1,0 +1,163 @@
+--- /Users/sail/Downloads/HairJourney/HairJourney/PatientPortfolioView.swift
++++ /Users/sail/Downloads/HairJourney/HairJourney/PatientPortfolioView.swift
+@@ -53,6 +53,14 @@
+     var created_at: String
+ }
+ 
++struct PortfolioClinicalScore: Codable, Identifiable {
++    var id: String
++    var mmas8: String
++    var dlqi: String
++    var created_at: String
++}
++
+ struct PatientPortfolioData: Codable {
+     var profile: PatientProfile
+     var quiz_reports: [PortfolioQuizReport]
+@@ -60,6 +68,7 @@
+     var hair_images: [PortfolioImage]
+     var prescriptions: [PortfolioPrescription]
+     var compliance_percent: Double
+     var compliance_days: Int
++    var clinical_scores: [PortfolioClinicalScore]
+ }
+ 
+@@ -82,6 +91,12 @@
+     @State private var imageRemarkDraft = ""
+     @State private var saveMessage = ""
+ 
++    // Score state
++    @State private var showScoreSheet = false
++    @State private var draftMmas8 = ""
++    @State private var draftDlqi = ""
++    @State private var isSubmittingScore = false
++
+     let tabs = ["Profile", "Quiz", "Appts", "Photos", "Rx"]
+     let tabIcons = ["person.fill", "doc.text.fill", "calendar", "photo.fill", "pills.fill"]
+ 
+@@ -131,6 +146,55 @@
+         }.resume()
+     }
+ 
++    func saveClinicalScore() {
++        guard let url = URL(string: APIService.baseURL + "add_clinical_score.php") else { return }
++        isSubmittingScore = true
++        let body: [String: Any] = [
++            "user_id": Int(patientId) ?? 0,
++            "doctor_id": Int(doctor.id) ?? 0,
++            "mmas8": Int(draftMmas8) ?? 0,
++            "dlqi": Int(draftDlqi) ?? 0
++        ]
++        var req = URLRequest(url: url)
++        req.httpMethod = "POST"
++        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
++        req.httpBody = try? JSONSerialization.data(withJSONObject: body)
++        URLSession.shared.dataTask(with: req) { _, _, _ in
++            DispatchQueue.main.async {
++                isSubmittingScore = false
++                showScoreSheet = false
++                draftMmas8 = ""
++                draftDlqi = ""
++                saveMessage = "✅ Clinical scales saved"
++                fetchPortfolio()
++            }
++        }.resume()
++    }
++
++    func exportPDF() {
++        guard let p = portfolio else { return }
++        let html = "<h1>Compliance & Clinical Report</h1><h2>Patient: \(p.profile.name)</h2><p>Weekly Compliance: \(p.compliance_percent)% (\(p.compliance_days)/7 days)</p><h3>Recent Scores</h3><ul>" + p.clinical_scores.map { "<li>Date: \(formatDate($0.created_at)) | MMAS-8: \($0.mmas8) | DLQI: \($0.dlqi)</li>" }.joined() + "</ul>"
++        let fmt = UIMarkupTextPrintFormatter(markupText: html)
++        let render = UIPrintPageRenderer()
++        render.addPrintFormatter(fmt, startingAtPageAt: 0)
++        let page = CGRect(x: 0, y: 0, width: 595.2, height: 841.8)
++        render.setValue(page, forKey: "paperRect")
++        render.setValue(page, forKey: "printableRect")
++        let pdfData = NSMutableData()
++        UIGraphicsBeginPDFContextToData(pdfData, page, nil)
++        for i in 0..<render.numberOfPages {
++            UIGraphicsBeginPDFPage()
++            render.drawPage(at: i, in: UIGraphicsGetPDFContextBounds())
++        }
++        UIGraphicsEndPDFContext()
++        let url = FileManager.default.temporaryDirectory.appendingPathComponent("\(p.profile.name)_Report.pdf")
++        try? pdfData.write(to: url)
++        let av = UIActivityViewController(activityItems: [url], applicationActivities: nil)
++        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
++           let root = scene.windows.first?.rootViewController {
++            root.present(av, animated: true)
++        }
++    }
++
+     var body: some View {
+         ZStack {
+@@ -226,6 +290,32 @@
+         .onAppear { animate = true; fetchPortfolio() }
+         .fullScreenCover(item: $fullScreenItem) { item in
+             FullScreenImageViewer(url: item.url)
++        }
++        .sheet(isPresented: $showScoreSheet) {
++            ZStack {
++                AppTheme.gradient.ignoresSafeArea()
++                VStack(spacing: 20) {
++                    Text("Log Clinical Scores").font(.title2.bold()).foregroundColor(AppTheme.titleText).padding(.top)
++                    VStack(alignment: .leading) {
++                        Text("MMAS-8 (Compliance 0-8)").font(.caption).foregroundColor(AppTheme.bodyText)
++                        TextField("Score", text: $draftMmas8).keyboardType(.numberPad).padding().background(Color.white.opacity(0.5)).cornerRadius(10)
++                    }
++                    VStack(alignment: .leading) {
++                        Text("DLQI (Quality of Life 0-30)").font(.caption).foregroundColor(AppTheme.bodyText)
++                        TextField("Score", text: $draftDlqi).keyboardType(.numberPad).padding().background(Color.white.opacity(0.5)).cornerRadius(10)
++                    }
++                    Button {
++                        saveClinicalScore()
++                    } label: {
++                        HStack {
++                            if isSubmittingScore { ProgressView().tint(.white) }
++                            Text("Save Scores").fontWeight(.bold)
++                        }
++                        .foregroundColor(.white).frame(maxWidth: .infinity).padding()
++                        .background(AppTheme.accent).cornerRadius(10)
++                    }.padding(.top)
++                    Spacer()
++                }.padding()
++            }.presentationDetents([.fraction(0.5)])
+         }
+     }
+@@ -262,6 +352,36 @@
+                     statBlock(p.compliance_days, "Streak Days", "flame.fill", .orange)
+                 }
+             }
++            
++            // Management block
++            GlassCard {
++                VStack(alignment: .leading, spacing: 14) {
++                    HStack {
++                        Text("Clinical Scores").font(.headline.bold()).foregroundColor(AppTheme.titleText)
++                        Spacer()
++                        Button("Add Score") { showScoreSheet = true }
++                            .font(.caption.bold()).padding(.horizontal, 10).padding(.vertical, 4)
++                            .background(Color.blue.opacity(0.15)).foregroundColor(.blue).cornerRadius(8)
++                    }
++                    if p.clinical_scores.isEmpty {
++                        Text("No MMAS-8 or DLQI scores recorded.").font(.caption).foregroundColor(AppTheme.bodyText)
++                    } else {
++                        ForEach(p.clinical_scores) { score in
++                            HStack {
++                                Text(formatDate(score.created_at)).font(.caption).foregroundColor(AppTheme.bodyText)
++                                Spacer()
++                                Text("MMAS: \(score.mmas8)").font(.caption.bold()).foregroundColor(.purple)
++                                Text("DLQI: \(score.dlqi)").font(.caption.bold()).foregroundColor(.orange)
++                            }.padding(8).background(Color.white.opacity(0.3)).cornerRadius(8)
++                        }
++                    }
++                    Divider()
++                    Button(action: exportPDF) {
++                        Label("Export PDF Report", systemImage: "square.and.arrow.up").font(.subheadline.bold())
++                            .foregroundColor(.white).frame(maxWidth: .infinity).padding(10)
++                            .background(AppTheme.accent).cornerRadius(8)
++                    }
++                }
++            }
+         }
+     }
