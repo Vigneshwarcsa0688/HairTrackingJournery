@@ -21,6 +21,7 @@ struct ProfileView: View {
     
     var user: User
     @EnvironmentObject var authVM: AuthViewModel
+    @Environment(\.horizontalSizeClass) var sizeClass
     
     @State private var name = ""
     @State private var phone = ""
@@ -38,6 +39,13 @@ struct ProfileView: View {
     
     // ✅ NEW: Logout dialog + navigation
     @State private var showLogoutConfirm = false
+    
+    @ObservedObject private var langManager = AppLanguageManager.shared
+    @ObservedObject private var specManager = ExpertSpecializationManager.shared
+    @State private var showLanguageSheet = false
+    @State private var selectedSpecialization: String = ""
+    @State private var selectedLanguages: [String] = []
+    @State private var memberPreferredLang: String = ""
     
     struct UpdateRequest: Codable {
         let id: Int
@@ -207,42 +215,56 @@ struct ProfileView: View {
     
     var body: some View {
         ZStack {
-            AppTheme.gradient.ignoresSafeArea()
+            AppBackgroundView()
             
             if isLoading {
                 ProgressView()
-                    .scaleEffect(1.5)
-                    .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.accent))
+                    .scaleEffect(1.3)
+                    .tint(AppTheme.primaryBrand)
             }
             
-            ScrollView(showsIndicators: false) {
+            ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 24) {
                     
+                    // MARK: - Avatar & Identity Header
                     VStack(spacing: 12) {
                         PhotosPicker(selection: $avatarItem, matching: .images) {
-                            ZStack {
+                            ZStack(alignment: .bottomTrailing) {
                                 if isUploadingProfilePic {
-                                    Circle().fill(AppTheme.premiumAccentGradient).frame(width: 84, height: 84)
-                                        .shadow(color: AppTheme.accent.opacity(0.3), radius: 8, y: 4)
+                                    Circle().fill(AppTheme.brandGradient).frame(width: 90, height: 90)
+                                        .shadow(color: AppTheme.primaryBrand.opacity(0.35), radius: 8, y: 4)
                                     ProgressView().tint(.white)
                                 } else if let pp = profilePicture, let url = URL(string: APIService.baseURL + pp) {
-                                    AsyncImage(url: url) { phase in
+                                    CachedAsyncImage(url: url) { phase in
                                         if let image = phase.image {
                                             image.resizable().scaledToFill()
                                         } else {
-                                            Circle().fill(AppTheme.premiumAccentGradient)
+                                            Circle().fill(AppTheme.brandGradient)
                                             ProgressView().tint(.white)
                                         }
                                     }
-                                    .frame(width: 84, height: 84)
+                                    .frame(width: 90, height: 90)
                                     .clipShape(Circle())
-                                    .shadow(color: AppTheme.accent.opacity(0.3), radius: 8, y: 4)
+                                    .shadow(color: AppTheme.primaryBrand.opacity(0.25), radius: 8, y: 4)
                                 } else {
-                                    Circle().fill(AppTheme.premiumAccentGradient).frame(width: 84, height: 84)
-                                        .shadow(color: AppTheme.accent.opacity(0.3), radius: 8, y: 4)
-                                    Image(systemName: "camera.fill")
-                                        .font(.system(size: 32)).foregroundColor(.white)
+                                    Circle().fill(AppTheme.brandGradient).frame(width: 90, height: 90)
+                                        .shadow(color: AppTheme.primaryBrand.opacity(0.35), radius: 8, y: 4)
+                                    Text(name.isEmpty ? user.name.prefix(1).uppercased() : name.prefix(1).uppercased())
+                                        .font(.system(size: 34, weight: .bold))
+                                        .foregroundColor(.white)
                                 }
+                                
+                                // Camera Edit Badge
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.white)
+                                        .frame(width: 28, height: 28)
+                                        .shadow(color: Color.black.opacity(0.12), radius: 4, y: 2)
+                                    Image(systemName: "camera.fill")
+                                        .font(.system(size: 13, weight: .semibold))
+                                        .foregroundColor(AppTheme.primaryBrand)
+                                }
+                                .offset(x: 2, y: 2)
                             }
                         }
                         .disabled(isUploadingProfilePic)
@@ -255,75 +277,250 @@ struct ProfileView: View {
                                 }
                             }
                         }
-                        .scaleEffect(animate ? 1 : 0.6)
+                        .scaleEffect(animate ? 1 : 0.7)
                         .animation(.spring(response: 0.6, dampingFraction: 0.7), value: animate)
                         
-                        Text(name.isEmpty ? user.name : name)
-                            .font(.title.bold())
-                            .foregroundColor(AppTheme.titleText)
-                        
-                        Text(user.email)
-                            .font(.subheadline)
-                            .foregroundColor(AppTheme.bodyText(0.7))
-                    }
-                    
-                    GlassCard {
-                        VStack(spacing: 16) {
-                            profileField(icon: "person.fill", placeholder: "Full Name", text: $name)
-                            profileField(icon: "phone.fill", placeholder: "Phone", text: $phone)
-                            profileField(icon: "mappin.and.ellipse", placeholder: "Place", text: $place)
-                            profileField(icon: "calendar", placeholder: "DOB (yyyy-mm-dd)", text: $dob)
+                        VStack(spacing: 4) {
+                            Text(name.isEmpty ? user.name : name)
+                                .font(.title2.weight(.bold))
+                                .foregroundColor(AppTheme.titleText)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
                             
-                            Button("Update Profile") {
-                                updateProfile()
+                            HStack(spacing: 6) {
+                                Text(user.email)
+                                    .font(.subheadline)
+                                    .foregroundColor(AppTheme.bodyText(0.75))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.8)
+                                
+                                Text(user.role.uppercased())
+                                    .font(.system(size: 9, weight: .heavy))
+                                    .tracking(0.6)
+                                    .foregroundColor(AppTheme.primaryBrand)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(AppTheme.primaryBrand.opacity(0.12))
+                                    .clipShape(Capsule())
                             }
-                            .buttonStyle(PrimaryButtonStyle())
+                        }
+                    }
+                    .padding(.top, 10)
+                    
+                    // MARK: - Personal Information Form
+                    VStack(alignment: .leading, spacing: 10) {
+                        SectionHeaderView(title: "Personal Information", subtitle: "Account", icon: "person.text.rectangle")
+                        
+                        GlassCard(cornerRadius: 22, paddingAmount: 18) {
+                            VStack(spacing: 14) {
+                                profileField(icon: "person.fill", placeholder: "Full Name", text: $name)
+                                profileField(icon: "phone.fill", placeholder: "Phone Number", text: $phone)
+                                profileField(icon: "mappin.and.ellipse", placeholder: "City / Place", text: $place)
+                                profileField(icon: "calendar", placeholder: "Birth Date (yyyy-mm-dd)", text: $dob)
+                                
+                                Button {
+                                    updateProfile()
+                                } label: {
+                                    HStack(spacing: 8) {
+                                        Image(systemName: "checkmark.circle.fill")
+                                        Text("Save Changes")
+                                    }
+                                }
+                                .buttonStyle(PrimaryButtonStyle(height: 48))
+                                .padding(.top, 4)
+                            }
                         }
                     }
                     
-                    GlassCard {
-                        VStack(spacing: 14) {
-                            // ✅ ABOUT APP BUTTON
-                            NavigationLink(destination: AboutView()) {
-                                Label("About App", systemImage: "info.circle.fill")
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.blue.opacity(0.15))
-                                    .foregroundColor(.blue)
-                                    .cornerRadius(16)
+                    // MARK: - Language & Specialization Preferences
+                    VStack(alignment: .leading, spacing: 10) {
+                        SectionHeaderView(
+                            title: user.role.lowercased() == "doctor" ? langManager.text("specialization_and_languages") : langManager.text("language_preferences"),
+                            subtitle: langManager.text("preferences"),
+                            icon: "globe.americas.fill"
+                        )
+                        
+                        GlassCard(cornerRadius: 22, paddingAmount: 16) {
+                            VStack(spacing: 16) {
+                                
+                                // App Display Language
+                                Button(action: {
+                                    showLanguageSheet = true
+                                }) {
+                                    HStack(spacing: 12) {
+                                        ZStack {
+                                            Circle()
+                                                .fill(AppTheme.primaryBrand.opacity(0.12))
+                                                .frame(width: 40, height: 40)
+                                            Text(langManager.currentLanguage.flag)
+                                                .font(.system(size: 20))
+                                        }
+                                        
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(langManager.text("app_language"))
+                                                .font(.subheadline.weight(.bold))
+                                                .foregroundColor(AppTheme.titleText)
+                                            Text(langManager.currentLanguage.displayName)
+                                                .font(.caption)
+                                                .foregroundColor(AppTheme.emeraldMint)
+                                        }
+                                        
+                                        Spacer()
+                                        
+                                        HStack(spacing: 4) {
+                                            Text(langManager.text("change"))
+                                                .font(.caption.bold())
+                                                .foregroundColor(AppTheme.primaryBrand)
+                                            Image(systemName: "chevron.right")
+                                                .font(.system(size: 11, weight: .bold))
+                                                .foregroundColor(AppTheme.bodyText(0.4))
+                                        }
+                                    }
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                
+                                if user.role.lowercased() == "doctor" {
+                                    Divider().opacity(0.4)
+                                    
+                                    // Expert Clinical Specialization Picker
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        HStack {
+                                            Text(langManager.text("clinical_specialization").uppercased())
+                                                .font(.system(size: 11, weight: .heavy))
+                                                .tracking(1.0)
+                                                .foregroundColor(AppTheme.primaryBrand)
+                                            Spacer()
+                                        }
+                                        
+                                        Menu {
+                                            ForEach(ExpertSpecializationManager.availableSpecializations, id: \.self) { spec in
+                                                Button(action: {
+                                                    selectedSpecialization = spec
+                                                    specManager.setSpecialization(for: user.id, specialization: spec)
+                                                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                                                }) {
+                                                    HStack {
+                                                        Text(spec)
+                                                        if selectedSpecialization == spec {
+                                                            Image(systemName: "checkmark")
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } label: {
+                                            HStack {
+                                                Image(systemName: "cross.case.fill")
+                                                    .foregroundColor(AppTheme.emeraldMint)
+                                                    .font(.system(size: 14))
+                                                Text(selectedSpecialization.isEmpty ? "Select Specialization" : selectedSpecialization)
+                                                    .font(.subheadline.weight(.semibold))
+                                                    .foregroundColor(AppTheme.titleText)
+                                                Spacer()
+                                                Image(systemName: "chevron.up.chevron.down")
+                                                    .font(.system(size: 12))
+                                                    .foregroundColor(AppTheme.bodyText(0.5))
+                                            }
+                                            .padding(12)
+                                            .background(Color.white.opacity(0.5))
+                                            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                                        }
+                                    }
+                                }
                             }
-                            
-                            Button(role: .destructive) {
-                                showDeleteConfirm = true
-                            } label: {
-                                Label("Delete Account", systemImage: "trash.fill")
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(AppTheme.error.opacity(0.15))
-                                    .foregroundColor(AppTheme.error)
-                                    .cornerRadius(16)
+                        }
+                    }
+                    
+                    // MARK: - Legal, App Store Policies & About
+                    VStack(alignment: .leading, spacing: 10) {
+                        SectionHeaderView(title: "Legal & Information", subtitle: "Compliance", icon: "doc.text.fill")
+                        
+                        GlassCard(cornerRadius: 20, paddingAmount: 10) {
+                            VStack(spacing: 0) {
+                                NavigationLink(destination: PrivacyPolicyView()) {
+                                    profileLinkRow(icon: "hand.raised.fill", title: "Privacy Policy", color: AppTheme.primaryBrand)
+                                }
+                                
+                                Divider().padding(.leading, 46).opacity(0.5)
+                                
+                                NavigationLink(destination: TermsView()) {
+                                    profileLinkRow(icon: "doc.plaintext.fill", title: "Terms & Conditions", color: AppTheme.irisPurple)
+                                }
+                                
+                                Divider().padding(.leading, 46).opacity(0.5)
+                                
+                                NavigationLink(destination: AboutView()) {
+                                    profileLinkRow(icon: "info.circle.fill", title: "About HairJourney", color: .blue)
+                                }
                             }
-                            
-                            // ✅ UPDATED LOGOUT BUTTON
-                            Button {
-                                showLogoutConfirm = true
-                            } label: {
-                                Label("Logout", systemImage: "arrow.backward.circle.fill")
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(AppTheme.accent.opacity(0.15))
-                                    .foregroundColor(AppTheme.accent)
-                                    .cornerRadius(16)
+                        }
+                    }
+                    
+                    // MARK: - Account Actions (Logout & Delete)
+                    VStack(alignment: .leading, spacing: 10) {
+                        SectionHeaderView(title: "Account Security", subtitle: "Session", icon: "lock.shield.fill")
+                        
+                        GlassCard(cornerRadius: 20, paddingAmount: 14) {
+                            VStack(spacing: 12) {
+                                // Logout Button
+                                Button {
+                                    showLogoutConfirm = true
+                                } label: {
+                                    HStack(spacing: 12) {
+                                        ZStack {
+                                            Circle()
+                                                .fill(AppTheme.primaryBrand.opacity(0.12))
+                                                .frame(width: 36, height: 36)
+                                            Image(systemName: "arrow.backward.circle.fill")
+                                                .foregroundColor(AppTheme.primaryBrand)
+                                        }
+                                        Text("Log Out")
+                                            .font(.subheadline.bold())
+                                            .foregroundColor(AppTheme.primaryBrand)
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 12, weight: .semibold))
+                                            .foregroundColor(AppTheme.bodyText(0.4))
+                                    }
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 4)
+                                }
+                                
+                                Divider().opacity(0.5)
+                                
+                                // Delete Account Button
+                                Button(role: .destructive) {
+                                    showDeleteConfirm = true
+                                } label: {
+                                    HStack(spacing: 12) {
+                                        ZStack {
+                                            Circle()
+                                                .fill(AppTheme.coralRose.opacity(0.12))
+                                                .frame(width: 36, height: 36)
+                                            Image(systemName: "trash.fill")
+                                                .foregroundColor(AppTheme.coralRose)
+                                        }
+                                        Text("Delete Account")
+                                            .font(.subheadline.bold())
+                                            .foregroundColor(AppTheme.coralRose)
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 12, weight: .semibold))
+                                            .foregroundColor(AppTheme.bodyText(0.4))
+                                    }
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 4)
+                                }
                             }
                         }
                     }
                     
                     Spacer(minLength: 40)
                 }
-                .padding()
-                .frame(maxWidth: 550)
-                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.horizontal, 16)
+                .frame(maxWidth: AppTheme.maxContentWidth(sizeClass))
+                .frame(maxWidth: .infinity, alignment: .top)
             }
+            .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -336,53 +533,95 @@ struct ProfileView: View {
         .onAppear {
             animate = true
             fetchProfile()
+            selectedSpecialization = specManager.getSpecialization(for: user.id)
+            selectedLanguages = specManager.getLanguages(for: user.id)
+            memberPreferredLang = specManager.getMemberPreferredLanguage(for: user.id)
+        }
+        .sheet(isPresented: $showLanguageSheet) {
+            LanguagePickerSheet()
+                .presentationDetents([.medium, .large])
         }
         
         // DELETE CONFIRM
         .confirmationDialog(
-            "Are you sure you want to delete your account?",
-            isPresented: $showDeleteConfirm
+            "Are you sure you want to permanently delete your account?",
+            isPresented: $showDeleteConfirm,
+            titleVisibility: .visible
         ) {
-            Button("Delete Account", role: .destructive) {
+            Button("Delete My Account", role: .destructive) {
                 deleteAccount()
             }
             Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("This action cannot be undone. All your progress photos, assessment history, and logs will be permanently erased.")
         }
         
-        // ✅ LOGOUT CONFIRM
+        // LOGOUT CONFIRM
         .alert("Logout", isPresented: $showLogoutConfirm) {
-            Button("Yes", role: .destructive) {
+            Button("Yes, Logout", role: .destructive) {
                 authVM.logout()
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("Are you sure you want to logout?")
+            Text("Are you sure you want to log out of your session?")
         }
         
         // SUCCESS ALERT
         .alert("Success", isPresented: $showSuccessDialog) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text("Profile updated successfully")
+            Text("Your profile has been successfully updated.")
         }
     }
     
+    @ViewBuilder
+    private func profileLinkRow(icon: String, title: String, color: Color) -> some View {
+        HStack(spacing: 12) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(color.opacity(0.12))
+                    .frame(width: 34, height: 34)
+                Image(systemName: icon)
+                    .font(.system(size: 15))
+                    .foregroundColor(color)
+            }
+            
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .foregroundColor(AppTheme.titleText)
+            
+            Spacer()
+            
+            Image(systemName: "chevron.right")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(AppTheme.bodyText(0.4))
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 10)
+    }
+    
     func profileField(icon: String, placeholder: String, text: Binding<String>) -> some View {
-        HStack {
-            Image(systemName: icon)
-                .foregroundColor(AppTheme.accent)
-                .frame(width: 24)
+        HStack(spacing: 12) {
+            ZStack {
+                Circle()
+                    .fill(AppTheme.primaryBrand.opacity(0.1))
+                    .frame(width: 32, height: 32)
+                Image(systemName: icon)
+                    .font(.system(size: 14))
+                    .foregroundColor(AppTheme.primaryBrand)
+            }
             
             TextField(placeholder, text: text)
                 .autocapitalization(.none)
                 .foregroundColor(AppTheme.titleText)
+                .font(.subheadline)
         }
-        .padding()
-        .background(Color.white.opacity(0.45))
-        .cornerRadius(16)
+        .padding(10)
+        .background(Color.white.opacity(0.85))
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.white.opacity(0.6), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(Color.white, lineWidth: 1)
         )
     }
 }

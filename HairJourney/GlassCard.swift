@@ -2,47 +2,63 @@ import SwiftUI
 
 struct GlassCard<Content: View>: View {
     let content: Content
+    var cornerRadius: CGFloat = 22
+    var paddingAmount: CGFloat = 18
     
-    init(@ViewBuilder content: () -> Content) {
+    init(cornerRadius: CGFloat = 22, padding: CGFloat = 18, @ViewBuilder content: () -> Content) {
+        self.cornerRadius = cornerRadius
+        self.paddingAmount = padding
+        self.content = content()
+    }
+    
+    init(cornerRadius: CGFloat, paddingAmount: CGFloat, @ViewBuilder content: () -> Content) {
+        self.cornerRadius = cornerRadius
+        self.paddingAmount = paddingAmount
         self.content = content()
     }
     
     var body: some View {
         ZStack {
-            // Base blur for medical cleanliness
-            RoundedRectangle(cornerRadius: 26, style: .continuous)
+            // Ultra-clean frosted glass backdrop
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                 .fill(.ultraThinMaterial)
-                .background(
-                    RoundedRectangle(cornerRadius: 26, style: .continuous)
-                        .fill(Color.white.opacity(0.2))
-                )
             
-            // Bright white overlay top layer
-            RoundedRectangle(cornerRadius: 26, style: .continuous)
-                .fill(Color.white.opacity(0.6))
-                .background(.ultraThinMaterial)
+            // Soft translucent white highlight layer
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.70),
+                            Color.white.opacity(0.40)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
 
-            // Dynamic border for reflective premium look
-            RoundedRectangle(cornerRadius: 26, style: .continuous)
+            // Specular border for crisp edge definition
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                 .stroke(
                     LinearGradient(
                         colors: [
-                            Color.white.opacity(0.9),
-                            Color.white.opacity(0.2),
-                            Color.white.opacity(0.9)
+                            Color.white.opacity(0.95),
+                            Color.white.opacity(0.30),
+                            Color.white.opacity(0.85)
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ),
-                    lineWidth: 1.5
+                    lineWidth: 1.2
                 )
             
             content
-                .padding(18)
+                .padding(paddingAmount)
         }
-        .shadow(color: Color(red: 0.12, green: 0.18, blue: 0.35).opacity(0.06), radius: 15, x: 0, y: 8)
-        .shadow(color: Color(red: 0.12, green: 0.18, blue: 0.35).opacity(0.04), radius: 30, x: 0, y: 15)
-        .padding(.horizontal, 4)
+        // Multi-level soft shadows (ambient + directional)
+        .shadow(color: Color(red: 0.10, green: 0.15, blue: 0.30).opacity(0.04), radius: 6, x: 0, y: 3)
+        .shadow(color: Color(red: 0.10, green: 0.15, blue: 0.30).opacity(0.06), radius: 18, x: 0, y: 10)
+        .padding(.horizontal, 2)
     }
 }
+
 

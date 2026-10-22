@@ -5,15 +5,15 @@
 
     <!-- Camera Permission -->
     <key>NSCameraUsageDescription</key>
-    <string>This app needs access to the camera to take photos.</string>
+    <string>HairJourney uses your camera to capture milestone scalp and hairline photos for tracking progress over time.</string>
 
     <!-- Photo Library Permission -->
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>This app needs access to your photo library to upload images.</string>
+    <string>HairJourney accesses your photos so you can select and upload hair growth pictures for visual comparison.</string>
 
     <!-- Save to Gallery Permission -->
     <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>This app needs permission to save images to your photo library.</string>
+    <string>HairJourney requires permission to save your before-and-after hair progress comparison images to your photo library.</string>
 
     <!-- Allow HTTP Connections -->
     <key>NSAppTransportSecurity</key>

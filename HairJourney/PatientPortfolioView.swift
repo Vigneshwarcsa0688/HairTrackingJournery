@@ -170,7 +170,7 @@ struct PatientPortfolioView: View {
                 showPrescriptionSheet = false
                 draftMedicines = ""
                 draftRxNotes = ""
-                saveMessage = "✅ Prescription issued"
+                saveMessage = "✅ Routine recommendation issued"
                 fetchPortfolio()
             }
         }.resume()
@@ -196,7 +196,7 @@ struct PatientPortfolioView: View {
         <div class="row"><span>Compliance</span><span>\(String(format: "%.0f%%", p.compliance_percent)) (\(p.compliance_days) days)</span></div>
         </div>
         <div class="card"><h2>Routines (\(p.prescriptions.count))</h2>
-        \(p.prescriptions.map { "<div class='row'><span>\($0.medicines)</span><span>Expert \($0.doctor_name)</span></div>" }.joined())
+        \(p.prescriptions.map { "<div class='row'><span>\($0.medicines)</span><span>Expert \($0.doctor_name.replacingOccurrences(of: "Dr. ", with: "").replacingOccurrences(of: "Dr.", with: ""))</span></div>" }.joined())
         </div>
         </body></html>
         """
@@ -245,7 +245,7 @@ struct PatientPortfolioView: View {
                         HStack(spacing: 14) {
                             ZStack {
                                 if let pp = p.profile.profile_picture, let url = URL(string: APIService.baseURL + pp) {
-                                    AsyncImage(url: url) { phase in
+                                    CachedAsyncImage(url: url) { phase in
                                         if let image = phase.image {
                                             image.resizable().scaledToFill()
                                         } else {
@@ -392,7 +392,7 @@ struct PatientPortfolioView: View {
         }
         .sheet(isPresented: $showPrescriptionSheet) {
             ZStack {
-                AppTheme.gradient.ignoresSafeArea()
+                AppBackgroundView()
                 VStack(spacing: 20) {
                     RoundedRectangle(cornerRadius: 3).fill(.gray.opacity(0.4))
                         .frame(width: 40, height: 5).padding(.top, 14)
@@ -535,8 +535,8 @@ struct PortfolioQuizTab: View {
 
                         Divider()
 
-                        // Clinical Details Grid
-                        Text("Clinical Details").font(.subheadline.bold()).foregroundColor(AppTheme.titleText)
+                        // Details Grid
+                        Text("Assessment Details").font(.subheadline.bold()).foregroundColor(AppTheme.titleText)
 
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                             clinicalCell("Scalp Type",        report.scalp_type,           "waveform.path")
@@ -566,10 +566,10 @@ struct PortfolioQuizTab: View {
 
                         Divider()
 
-                        // Doctor Remark
+                        // Expert Remark
                         if editingQuizId == report.id {
                             VStack(alignment: .leading, spacing: 8) {
-                                Label("Your Clinical Opinion", systemImage: "stethoscope")
+                                Label("Your Expert Guidance", systemImage: "sparkles")
                                     .font(.caption.bold()).foregroundColor(AppTheme.accent)
                                 TextEditor(text: $quizRemarkDraft)
                                     .frame(height: 100).padding(8)
@@ -578,7 +578,7 @@ struct PortfolioQuizTab: View {
                                 HStack {
                                     Button("Cancel") { editingQuizId = nil }.foregroundColor(.red)
                                     Spacer()
-                                    Button("Save Opinion") { onSave(report.id, quizRemarkDraft) }
+                                    Button("Save Guidance") { onSave(report.id, quizRemarkDraft) }
                                         .font(.subheadline.bold()).foregroundColor(.white)
                                         .padding(.horizontal, 14).padding(.vertical, 8)
                                         .background(AppTheme.accent).cornerRadius(10)
@@ -587,14 +587,14 @@ struct PortfolioQuizTab: View {
                         } else {
                             HStack(alignment: .top) {
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Label("Doctor Opinion", systemImage: "stethoscope")
+                                    Label("Expert Guidance", systemImage: "sparkles")
                                         .font(.caption.bold()).foregroundColor(AppTheme.accent)
                                     if let r = report.doctor_remark, !r.isEmpty {
                                         Text(r).font(.subheadline).foregroundColor(AppTheme.titleText)
                                             .padding(10).frame(maxWidth: .infinity, alignment: .leading)
                                             .background(Color.blue.opacity(0.07)).cornerRadius(10)
                                     } else {
-                                        Text("No opinion recorded yet")
+                                        Text("No expert guidance recorded yet")
                                             .font(.caption).foregroundColor(.orange)
                                     }
                                 }
@@ -657,7 +657,7 @@ struct PortfolioAppointmentsTab: View {
                 GlassCard {
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(appt.doctor_name).font(.headline).foregroundColor(AppTheme.titleText)
+                            Text("Expert \(appt.doctor_name.replacingOccurrences(of: "Dr. ", with: "").replacingOccurrences(of: "Dr.", with: ""))").font(.headline).foregroundColor(AppTheme.titleText)
                             Text(formatDate(appt.slot_time)).font(.caption).foregroundColor(AppTheme.bodyText)
                         }
                         Spacer()
@@ -727,7 +727,7 @@ struct PortfolioPhotosTab: View {
                                         }
                                     } label: {
                                         VStack(spacing: 6) {
-                                            AsyncImage(url: URL(string: APIService.baseURL + img.image_path)) { phase in
+                                            CachedAsyncImage(url: URL(string: APIService.baseURL + img.image_path)) { phase in
                                                 if let i = phase.image {
                                                     i.resizable().scaledToFill()
                                                         .frame(width: 120, height: 160).clipped().cornerRadius(10)
@@ -746,7 +746,7 @@ struct PortfolioPhotosTab: View {
                             Divider()
                             if editingImageId == first.id {
                                 VStack(alignment: .leading, spacing: 8) {
-                                    Text("Clinical Opinion").font(.caption.bold()).foregroundColor(AppTheme.bodyText)
+                                    Text("Expert Guidance").font(.caption.bold()).foregroundColor(AppTheme.bodyText)
                                     TextEditor(text: $imageRemarkDraft)
                                         .frame(height: 80).padding(4)
                                         .background(Color.white.opacity(0.5)).cornerRadius(8)
@@ -760,7 +760,7 @@ struct PortfolioPhotosTab: View {
                             } else {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 4) {
-                                        Text("Clinical Feedback").font(.caption.bold()).foregroundColor(AppTheme.bodyText)
+                                        Text("Expert Feedback").font(.caption.bold()).foregroundColor(AppTheme.bodyText)
                                         HStack(spacing: 8) {
                                             Image(systemName: "hand.thumbsup.fill").foregroundColor(AppTheme.success)
                                             Text(first.doctor_remark ?? "Awaiting expert feedback")
@@ -814,7 +814,7 @@ struct PortfolioPrescriptionsTab: View {
                 GlassCard {
                     VStack(alignment: .leading, spacing: 10) {
                         HStack {
-                            Label("Expert \\(rx.doctor_name)", systemImage: "stethoscope")
+                            Label("Expert \(rx.doctor_name.replacingOccurrences(of: "Dr. ", with: "").replacingOccurrences(of: "Dr.", with: ""))", systemImage: "sparkles")
                                 .font(.headline.bold()).foregroundColor(AppTheme.titleText)
                             Spacer()
                             Text(formatDate(rx.created_at)).font(.caption).foregroundColor(AppTheme.bodyText)
@@ -926,7 +926,7 @@ struct PortfolioCompareTab: View {
                             .overlay(VStack(spacing: 12) {
                                 Image(systemName: "photo.on.rectangle.angled")
                                     .font(.largeTitle).foregroundColor(.white)
-                                Text("No photos uploaded for this patient yet")
+                                Text("No photos uploaded for this member yet")
                                     .font(.callout).foregroundColor(.white)
                                     .multilineTextAlignment(.center).padding(.horizontal)
                             })
@@ -959,7 +959,7 @@ struct PortfolioCompareTab: View {
     @ViewBuilder
     private func imgLayer(stage: String, width: CGFloat, height: CGFloat) -> some View {
         if let img = image(for: stage), let url = URL(string: APIService.baseURL + img.image_path) {
-            AsyncImage(url: url) { phase in
+            CachedAsyncImage(url: url) { phase in
                 if let i = phase.image {
                     i.resizable().scaledToFill().frame(width: width, height: height).clipped()
                 } else {

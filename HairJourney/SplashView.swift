@@ -26,19 +26,17 @@ struct SplashView: View {
                 
                 ZStack {
                     Circle()
-                        .fill(Color.white.opacity(glow ? 0.25 : 0.12))
-                        .frame(width: 140, height: 140)
-                        .blur(radius: 20)
+                        .fill(AppTheme.primaryBrand.opacity(glow ? 0.25 : 0.10))
+                        .frame(width: 150, height: 150)
+                        .blur(radius: 25)
                         .animation(.easeInOut(duration: 1.8).repeatForever(autoreverses: true), value: glow)
                     
-                    Image(systemName: "leaf.circle.fill")
-                        .font(.system(size: 95))
-                        .foregroundStyle(.white, AppTheme.premiumAccentGradient)
+                    HairJourneyLogoView(size: 104, showGlow: true)
                         .scaleEffect(scale)
-                        .shadow(color: AppTheme.accent.opacity(0.4), radius: 18, y: 8)
+                        .shadow(color: AppTheme.primaryBrand.opacity(0.4), radius: 20, y: 8)
                         .onAppear {
                             withAnimation(.easeInOut(duration: 1.6).repeatForever(autoreverses: true)) {
-                                scale = 1.1
+                                scale = 1.08
                                 glow = true
                             }
                         }

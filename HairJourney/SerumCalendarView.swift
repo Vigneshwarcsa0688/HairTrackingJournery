@@ -311,17 +311,26 @@ struct SerumCalendarView: View {
     // MARK: Body
     var body: some View {
         ZStack {
-            AppTheme.gradient.ignoresSafeArea()
-            ScrollView(showsIndicators: false) {
+            AppBackgroundView()
+            ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 24) {
                     
                     // ── Header ──
-                    VStack(spacing: 4) {
-                        Text("Serum Tracker")
-                            .font(.title.bold()).foregroundColor(AppTheme.titleText)
-                        Text("Target: \(reminderPrefs.timesPerDay)x daily") // show target from prescription
-                            .font(.subheadline.bold()).foregroundColor(AppTheme.accent)
-                    }.padding(.top)
+                    VStack(spacing: 6) {
+                        Text("Serum & Habit Tracker")
+                            .font(.title2.bold()).foregroundColor(AppTheme.titleText)
+                        HStack(spacing: 6) {
+                            Image(systemName: "pills.fill")
+                                .font(.caption)
+                            Text("Active Target: \(reminderPrefs.timesPerDay)× daily")
+                                .font(.subheadline.bold())
+                        }
+                        .foregroundColor(AppTheme.primaryBrand)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(AppTheme.primaryBrand.opacity(0.1))
+                        .clipShape(Capsule())
+                    }.padding(.top, 16)
                     
                     // ── Weekly Compliance Ring ──
                     GlassCard {
@@ -496,9 +505,9 @@ struct SerumCalendarView: View {
                     Spacer(minLength: 40)
                 }
                 .padding()
-                .frame(maxWidth: 600)
-                .frame(maxWidth: .infinity, alignment: .center)
+                .frame(maxWidth: .infinity, alignment: .top)
             }
+            .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

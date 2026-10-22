@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RootView: View {
     @EnvironmentObject var authVM: AuthViewModel
+    @ObservedObject private var langManager = AppLanguageManager.shared
     
     var body: some View {
         NavigationStack {
@@ -15,7 +16,7 @@ struct RootView: View {
                 LoginChoiceView()
             }
         }
-        .id(authVM.isLoggedIn) // Forces navigation stack reset on login/logout
+        .id("\(authVM.isLoggedIn)_\(langManager.currentLanguage.rawValue)")
     }
 }
 

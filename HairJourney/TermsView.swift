@@ -5,7 +5,7 @@ struct TermsView: View {
     
     var body: some View {
         ZStack {
-            AppTheme.gradient.ignoresSafeArea()
+            AppBackgroundView()
             
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 22) {
@@ -30,34 +30,34 @@ struct TermsView: View {
                     )
                     
                     section(
-                        title: "2. Medical Disclaimer",
-                        text: "Hair Journey provides educational insights and connects users with licensed professionals. It does not replace in-person medical diagnosis or treatment. Always consult a qualified doctor for medical concerns."
+                        title: "2. Academic Thesis Project & Wellness Disclaimer",
+                        text: "Hair Journey is an academic student thesis project developed for educational habit adherence and wellness tracking. It connects members with hair care specialists for routine advice. It does not provide clinical medical diagnosis or prescription treatments. Always consult a qualified physician or dermatologist for serious medical concerns."
                     )
                     
                     section(
-                        title: "3. User Responsibilities",
+                        title: "3. Member Responsibilities",
                         text: """
 You agree to:
-• Provide accurate information  
-• Upload only your own hair images  
+• Provide accurate profile information  
+• Upload only your own scalp & hair photos  
 • Use the app respectfully  
-• Not misuse medical advice
+• Follow recommended routines responsibly
 """
                     )
                     
                     section(
-                        title: "4. Doctor Interaction",
-                        text: "Doctors provide feedback based on the information and images you upload. Hair Journey is not responsible for individual medical decisions made by users."
+                        title: "4. Expert Guidance & Consultations",
+                        text: "Hair care specialists provide routine guidance and recommendations based on information and photos shared. Members remain responsible for their personal hair care product choices."
                     )
                     
                     section(
                         title: "5. Appointments & Recommendations",
-                        text: "Appointments are subject to expert approval. Recommendations and advice are provided by designated professionals, not by the app itself."
+                        text: "Appointments are subject to expert confirmation. Recommendations are provided by designated specialists for routine hair care."
                     )
                     
                     section(
                         title: "6. Data Usage",
-                        text: "Your data is handled according to our Privacy Policy. We do not sell personal or medical information."
+                        text: "Your data is handled securely according to our Privacy Policy. We do not sell personal information."
                     )
                     
                     section(
@@ -67,7 +67,7 @@ You agree to:
                     
                     section(
                         title: "8. Limitation of Liability",
-                        text: "Hair Journey is not liable for medical outcomes, indirect damages, or issues arising from misuse of the app."
+                        text: "Hair Journey is not liable for personal care outcomes, indirect damages, or issues arising from misuse of the app."
                     )
                     
                     section(

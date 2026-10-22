@@ -24,77 +24,181 @@ struct HairAnalysis13QuizView: View {
         ("scalp_pain","Scalp pain?",["No","Slightly","Moderate","Severe"])
     ]
     
+    var categoryTitle: String {
+        switch currentQuestion {
+        case 0, 9, 11: return "Scalp Condition"
+        case 1, 4: return "Lifestyle & Rest"
+        case 2, 8: return "Hair Density & Shedding"
+        case 3: return "Genetics"
+        case 5, 6: return "Nutrition"
+        default: return "Hair Care & Styling"
+        }
+    }
+    
     var body: some View {
         ZStack {
-            AppTheme.gradient.ignoresSafeArea()
+            AppBackgroundView()
             
-            VStack(spacing: 24) {
+            VStack(spacing: 20) {
                 
-                VStack(spacing: 8) {
-                    Text("Hair Health Assessment")
-                        .font(.title.bold())
-                        .foregroundColor(AppTheme.titleText)
-
-                    Text("Question \(currentQuestion + 1) of 12")
-                        .foregroundColor(AppTheme.bodyText)
-                        .font(.subheadline)
+                // Progress Header
+                VStack(spacing: 10) {
+                    HStack {
+                        HStack(spacing: 6) {
+                            Image(systemName: "sparkles")
+                                .font(.caption.bold())
+                                .foregroundColor(AppTheme.primaryBrand)
+                            Text(categoryTitle.uppercased())
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor(AppTheme.primaryBrand)
+                                .tracking(1)
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(AppTheme.primaryBrand.opacity(0.12))
+                        .cornerRadius(20)
+                        
+                        Spacer()
+                        
+                        Text("Question \(currentQuestion + 1) / 12")
+                            .font(.caption.bold())
+                            .foregroundColor(AppTheme.bodyText)
+                    }
+                    .padding(.horizontal)
                     
-                    ProgressView(value: Double(currentQuestion + 1), total: 12)
-                        .tint(.white)
-                        .padding(.horizontal)
+                    // Custom gradient progress bar
+                    GeometryReader { geo in
+                        ZStack(alignment: .leading) {
+                            Capsule()
+                                .fill(Color.black.opacity(0.08))
+                                .frame(height: 7)
+                            
+                            Capsule()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [AppTheme.primaryBrand, AppTheme.irisPurple],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .frame(width: max(14, geo.size.width * CGFloat(currentQuestion + 1) / 12.0), height: 7)
+                                .animation(.spring(response: 0.4, dampingFraction: 0.8), value: currentQuestion)
+                        }
+                    }
+                    .frame(height: 7)
+                    .padding(.horizontal)
                 }
-                .padding(.top)
+                .padding(.top, 12)
                 .opacity(animate ? 1 : 0)
-                .offset(y: animate ? 0 : -20)
-                .animation(.easeOut(duration: 0.6), value: animate)
+                .offset(y: animate ? 0 : -15)
+                .animation(.easeOut(duration: 0.5), value: animate)
                 
-                GlassCard {
+                // Main Question & Options Card
+                ScrollView(showsIndicators: false) {
                     VStack(spacing: 20) {
-                        Text(questions[currentQuestion].1)
-                            .font(.title3.bold())
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(AppTheme.titleText)
-
-                        VStack(spacing: 14) {
-                            ForEach(0..<questions[currentQuestion].2.count, id: \.self) { i in
-                                Button {
-                                    answers[currentQuestion] = i
-                                    nextQuestion()
-                                } label: {
-                                    Text(questions[currentQuestion].2[i])
-                                        .font(.subheadline.bold())
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(
-                                            answers[currentQuestion] == i
-                                            ? Color.white.opacity(0.3)
-                                            : Color.white.opacity(0.12)
-                                        )
-                                        .foregroundColor(AppTheme.titleText)
-                                        .cornerRadius(12)
+                        GlassCard(cornerRadius: 24, padding: 22) {
+                            VStack(spacing: 22) {
+                                Text(questions[currentQuestion].1)
+                                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(AppTheme.titleText)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.top, 4)
+                                
+                                VStack(spacing: 12) {
+                                    ForEach(0..<questions[currentQuestion].2.count, id: \.self) { i in
+                                        let isSelected = answers[currentQuestion] == i
+                                        Button {
+                                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                                answers[currentQuestion] = i
+                                            }
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.22) {
+                                                nextQuestion()
+                                            }
+                                        } label: {
+                                            HStack(spacing: 14) {
+                                                ZStack {
+                                                    Circle()
+                                                        .stroke(isSelected ? AppTheme.primaryBrand : Color.black.opacity(0.2), lineWidth: isSelected ? 2 : 1.5)
+                                                        .frame(width: 22, height: 22)
+                                                    
+                                                    if isSelected {
+                                                        Circle()
+                                                            .fill(AppTheme.primaryBrand)
+                                                            .frame(width: 12, height: 12)
+                                                    }
+                                                }
+                                                
+                                                Text(questions[currentQuestion].2[i])
+                                                    .font(.system(size: 15, weight: isSelected ? .bold : .medium))
+                                                    .foregroundColor(isSelected ? AppTheme.primaryDark : AppTheme.titleText)
+                                                
+                                                Spacer()
+                                                
+                                                if isSelected {
+                                                    Image(systemName: "checkmark")
+                                                        .font(.system(size: 12, weight: .bold))
+                                                        .foregroundColor(AppTheme.primaryBrand)
+                                                }
+                                            }
+                                            .padding(.horizontal, 16)
+                                            .padding(.vertical, 14)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 14)
+                                                    .fill(isSelected ? AppTheme.primaryBrand.opacity(0.12) : Color.white.opacity(0.65))
+                                            )
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 14)
+                                                    .stroke(isSelected ? AppTheme.primaryBrand.opacity(0.4) : Color.black.opacity(0.06), lineWidth: 1)
+                                            )
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
                                 }
                             }
                         }
+                        
+                        // Back navigation button
+                        if currentQuestion > 0 {
+                            Button {
+                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                    currentQuestion -= 1
+                                }
+                            } label: {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "arrow.left")
+                                        .font(.caption.bold())
+                                    Text("Previous Question")
+                                        .font(.subheadline.bold())
+                                }
+                                .foregroundColor(AppTheme.bodyText)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 10)
+                                .background(Color.white.opacity(0.5))
+                                .cornerRadius(20)
+                            }
+                            .buttonStyle(.plain)
+                            .transition(.opacity)
+                        }
                     }
+                    .padding(.horizontal, 20)
                 }
-                .padding(.horizontal)
-                .opacity(animate ? 1 : 0)
-                .offset(y: animate ? 0 : 30)
-                .animation(.easeOut(duration: 0.7), value: animate)
                 
                 Spacer()
             }
-            .padding(.bottom)
         }
+        .navigationTitle("Hair Assessment")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { animate = true }
         
-        // ✅ UPDATED SHEET
+        // Sheet presentation for report
         .sheet(isPresented: $showReport) {
             HairAnalysisReportView(
-                score: answers.reduce(0, +),
+                score: answers.filter { $0 >= 0 }.reduce(0, +),
                 onFinish: {
-                    dismiss() // ✅ THIS TAKES USER TO DASHBOARD
+                    dismiss()
                 }
             )
         }
@@ -102,7 +206,9 @@ struct HairAnalysis13QuizView: View {
     
     func nextQuestion() {
         if currentQuestion < questions.count - 1 {
-            currentQuestion += 1
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                currentQuestion += 1
+            }
         } else {
             submitQuiz()
             showReport = true
@@ -114,8 +220,19 @@ struct HairAnalysis13QuizView: View {
         
         for i in 0..<questions.count {
             let key = questions[i].0
-            let value = questions[i].2[answers[i]]
-            dict[key] = value
+            let options = questions[i].2
+            
+            // Safe index lookup to prevent Index out of range
+            if answers.indices.contains(i) {
+                let answerIdx = answers[i]
+                if options.indices.contains(answerIdx) {
+                    dict[key] = options[answerIdx]
+                } else {
+                    dict[key] = options.first ?? ""
+                }
+            } else {
+                dict[key] = options.first ?? ""
+            }
         }
         
         APIService.shared.submitFullQuiz(

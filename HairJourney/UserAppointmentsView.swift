@@ -50,17 +50,17 @@ struct UserAppointmentsView: View {
                 
                 let date48h = slotDate.addingTimeInterval(-48 * 3600)
                 if date48h > now {
-                    scheduleNotification(id: "appt_48h_\(appt.id)", title: "Upcoming Appointment", body: "Your consultation with \n Dr. \(appt.doctor_name) is in 48 hours.", date: date48h)
+                    scheduleNotification(id: "appt_48h_\(appt.id)", title: "Upcoming Consultation", body: "Your consultation with Expert \(appt.doctor_name.replacingOccurrences(of: "Dr. ", with: "").replacingOccurrences(of: "Dr.", with: "")) is in 48 hours.", date: date48h)
                 }
                 
                 let date2h = slotDate.addingTimeInterval(-2 * 3600)
                 if date2h > now {
-                    scheduleNotification(id: "appt_2h_\(appt.id)", title: "Appointment Soon", body: "Your consultation with \n Dr. \(appt.doctor_name) is in 2 hours.", date: date2h)
+                    scheduleNotification(id: "appt_2h_\(appt.id)", title: "Consultation Soon", body: "Your consultation with Expert \(appt.doctor_name.replacingOccurrences(of: "Dr. ", with: "").replacingOccurrences(of: "Dr.", with: "")) is in 2 hours.", date: date2h)
                 }
                 
                 let dateDayOf = Calendar.current.date(bySettingHour: 8, minute: 0, second: 0, of: slotDate) ?? slotDate.addingTimeInterval(-8 * 3600)
                 if dateDayOf > now && dateDayOf < slotDate {
-                    scheduleNotification(id: "appt_dayof_\(appt.id)", title: "Appointment Today", body: "You have a consultation with \n Dr. \(appt.doctor_name) today.", date: dateDayOf)
+                    scheduleNotification(id: "appt_dayof_\(appt.id)", title: "Consultation Today", body: "You have a consultation with Expert \(appt.doctor_name.replacingOccurrences(of: "Dr. ", with: "").replacingOccurrences(of: "Dr.", with: "")) today.", date: dateDayOf)
                 }
             }
         }
@@ -81,80 +81,129 @@ struct UserAppointmentsView: View {
     
     var body: some View {
         ZStack {
-            AppTheme.gradient.ignoresSafeArea()
+            AppBackgroundView()
             
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 22) {
+                VStack(spacing: 20) {
                     
                     VStack(spacing: 6) {
                         Text("My Consultations")
-                            .font(.title.bold())
+                            .font(.title2.bold())
                             .foregroundColor(AppTheme.titleText)
                         
-                        Text("Track your consultation requests")
+                        Text("Track booking status and upcoming expert appointments")
                             .font(.subheadline)
-                            .foregroundColor(AppTheme.bodyText)
+                            .foregroundColor(AppTheme.bodyText(0.75))
                     }
-                    .padding(.top)
+                    .padding(.top, 16)
                     .opacity(animate ? 1 : 0)
-                    .offset(y: animate ? 0 : -20)
+                    .offset(y: animate ? 0 : -15)
                     .animation(.easeOut(duration: 0.6), value: animate)
                     
                     ForEach(appointments) { appt in
-                        GlassCard {
-                            HStack(spacing: 16) {
-                                
-                                ZStack {
-                                    Circle()
-                                        .fill(Color.white.opacity(0.2))
-                                        .frame(width: 46, height: 46)
+                        GlassCard(cornerRadius: 20, paddingAmount: 16) {
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack(spacing: 14) {
+                                    ZStack {
+                                        Circle()
+                                            .fill(AppTheme.brandGradient)
+                                            .frame(width: 48, height: 48)
+                                            .shadow(color: AppTheme.primaryBrand.opacity(0.25), radius: 6, y: 3)
+                                        
+                                        Image(systemName: "person.badge.shield.checkmark.fill")
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 20, weight: .semibold))
+                                    }
                                     
-                                    Image(systemName: "stethoscope")
-                                        .foregroundColor(AppTheme.titleText)
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("Expert \(appt.doctor_name.replacingOccurrences(of: "Dr. ", with: "").replacingOccurrences(of: "Dr.", with: ""))")
+                                            .font(.headline.weight(.bold))
+                                            .foregroundColor(AppTheme.titleText)
+                                        
+                                        HStack(spacing: 4) {
+                                            Image(systemName: "calendar.badge.clock")
+                                                .font(.system(size: 11))
+                                                .foregroundColor(AppTheme.primaryBrand)
+                                            Text(formatDate(appt.slot_time))
+                                                .font(.caption.weight(.medium))
+                                                .foregroundColor(AppTheme.bodyText)
+                                        }
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    AppStatusBadge(status: appt.status)
                                 }
                                 
-                                VStack(alignment: .leading, spacing: 6) {
-                                    Text(appt.doctor_name)
-                                        .font(.headline)
-                                        .foregroundColor(AppTheme.titleText)
-                                    
-                                    Text(formatDate(appt.slot_time))
-                                        .font(.caption)
-                                        .foregroundColor(AppTheme.bodyText)
+                                if appt.status == "Approved" {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "bell.badge.fill")
+                                            .font(.system(size: 11))
+                                            .foregroundColor(AppTheme.emeraldMint)
+                                        Text("Reminders active (48h, 2h & morning of visit)")
+                                            .font(.system(size: 11, weight: .medium))
+                                            .foregroundColor(AppTheme.emeraldMint)
+                                    }
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 5)
+                                    .background(AppTheme.emeraldMint.opacity(0.1))
+                                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                                 }
-                                
-                                Spacer()
-                                
-                                statusBadge(appt.status)
                             }
                         }
                         .opacity(animate ? 1 : 0)
-                        .offset(y: animate ? 0 : 25)
+                        .offset(y: animate ? 0 : 20)
                         .animation(.easeOut(duration: 0.7), value: animate)
                     }
                     
                     if appointments.isEmpty {
-                        VStack(spacing: 8) {
-                            Image(systemName: "calendar")
-                                .font(.largeTitle)
-                                .foregroundColor(AppTheme.secondaryText)
-                            
-                            Text("No consultations yet")
-                                .foregroundColor(AppTheme.bodyText)
-                                .font(.subheadline)
+                        GlassCard(cornerRadius: 22, paddingAmount: 24) {
+                            VStack(spacing: 14) {
+                                ZStack {
+                                    Circle()
+                                        .fill(AppTheme.primaryBrand.opacity(0.1))
+                                        .frame(width: 64, height: 64)
+                                    Image(systemName: "calendar.badge.plus")
+                                        .font(.system(size: 28))
+                                        .foregroundColor(AppTheme.primaryBrand)
+                                }
+                                
+                                Text("No Consultations Yet")
+                                    .font(.headline.bold())
+                                    .foregroundColor(AppTheme.titleText)
+                                
+                                Text("You haven't scheduled any consultations yet. Consult with hair experts to receive tailored hair care recommendations.")
+                                    .font(.caption)
+                                    .foregroundColor(AppTheme.bodyText(0.8))
+                                    .multilineTextAlignment(.center)
+                                    .padding(.horizontal, 10)
+                                
+                                NavigationLink(destination: BookAppointmentView(user: user)) {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "calendar.badge.plus")
+                                        Text("Book First Consultation")
+                                    }
+                                }
+                                .buttonStyle(PrimaryButtonStyle(height: 46))
+                                .padding(.top, 6)
+                            }
+                            .frame(maxWidth: .infinity)
                         }
-                        .padding(.top, 40)
+                        .padding(.top, 20)
                     }
                     
                     Spacer(minLength: 40)
                 }
-                .padding()
+                .padding(.horizontal, 16)
+            }
+            .refreshable {
+                fetchAppointments()
             }
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text("Consultations")
+                Text("My Consultations")
                     .font(.headline.bold())
                     .foregroundColor(AppTheme.titleText)
             }
@@ -163,23 +212,6 @@ struct UserAppointmentsView: View {
             animate = true
             fetchAppointments()
         }
-    }
-    
-    func statusBadge(_ status: String) -> some View {
-        Text(status)
-            .font(.caption.bold())
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(
-                status == "Approved" ? Color.green.opacity(0.25) :
-                status == "Rejected" ? Color.red.opacity(0.25) :
-                Color.orange.opacity(0.25)
-            )
-            .foregroundColor(
-                status == "Approved" ? .green :
-                status == "Rejected" ? .red : .orange
-            )
-            .cornerRadius(10)
     }
 }
 

@@ -29,7 +29,7 @@ struct FullScreenImageViewer: View {
         ZStack(alignment: .topTrailing) {
             Color.black.ignoresSafeArea()
 
-            AsyncImage(url: url) { phase in
+            CachedAsyncImage(url: url) { phase in
                 switch phase {
                 case .success(let image):
                     image
@@ -113,46 +113,81 @@ struct UserHairImagesView: View {
 
     var body: some View {
         ZStack {
-            AppTheme.gradient.ignoresSafeArea()
-            ScrollView(showsIndicators: false) {
+            AppBackgroundView()
+            ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 20) {
 
                     VStack(spacing: 6) {
                         Text("Hair Progress Albums")
-                            .font(.title.bold()).foregroundColor(AppTheme.titleText)
-                        Text("Swipe through your 4-view clinical records")
-                            .font(.subheadline).foregroundColor(AppTheme.bodyText)
+                            .font(.title2.bold())
+                            .foregroundColor(AppTheme.titleText)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.85)
+                        Text("Review multi-angle progress photography and expert feedback")
+                            .font(.subheadline).foregroundColor(AppTheme.bodyText(0.75))
+                            .multilineTextAlignment(.center)
                     }
-                    .padding(.top)
-                    .opacity(animate ? 1 : 0).offset(y: animate ? 0 : -20)
+                    .padding(.top, 16)
+                    .opacity(animate ? 1 : 0).offset(y: animate ? 0 : -15)
                     .animation(.easeOut(duration: 0.6), value: animate)
 
                     if albums.isEmpty {
-                        VStack(spacing: 10) {
-                            Image(systemName: "photo.on.rectangle.angled")
-                                .font(.system(size: 44)).foregroundColor(AppTheme.bodyText(0.4))
-                            Text("No albums uploaded yet")
-                                .foregroundColor(AppTheme.bodyText)
-                        }.padding(.top, 40)
+                        GlassCard(cornerRadius: 22, paddingAmount: 24) {
+                            VStack(spacing: 12) {
+                                Image(systemName: "photo.on.rectangle.angled")
+                                    .font(.system(size: 44)).foregroundColor(AppTheme.bodyText(0.35))
+                                Text("No Albums Uploaded Yet")
+                                    .font(.headline.bold())
+                                    .foregroundColor(AppTheme.titleText)
+                                Text("Document your baseline and progress photos across 4 progress angles to view your visual transformation.")
+                                    .font(.caption)
+                                    .foregroundColor(AppTheme.bodyText(0.75))
+                                    .multilineTextAlignment(.center)
+                                
+                                NavigationLink(destination: UploadHairImageView(user: user)) {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "camera.badge.plus")
+                                        Text("Upload First Album")
+                                    }
+                                }
+                                .buttonStyle(PrimaryButtonStyle(height: 46))
+                                .padding(.top, 6)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                        }
+                        .padding(.top, 20)
                     }
 
                     ForEach(albums) { album in
-                        GlassCard {
+                        GlassCard(cornerRadius: 22, paddingAmount: 18) {
                             VStack(alignment: .leading, spacing: 14) {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text(album.tag).font(.headline.bold()).foregroundColor(AppTheme.titleText)
-                                        Text(album.date).font(.caption).foregroundColor(AppTheme.bodyText)
+                                        Text(album.tag)
+                                            .font(.headline.weight(.bold))
+                                            .foregroundColor(AppTheme.titleText)
+                                        Text(formatDate(album.date))
+                                            .font(.caption)
+                                            .foregroundColor(AppTheme.bodyText(0.75))
                                     }
                                     Spacer()
-                                    Text("\(album.images.count) Views")
-                                        .font(.caption2.bold()).padding(.horizontal, 8).padding(.vertical, 4)
-                                        .background(Color.purple.opacity(0.15))
-                                        .foregroundColor(.purple).cornerRadius(8)
+                                    
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "square.2.layers.3d.top.filled")
+                                            .font(.system(size: 10))
+                                        Text("\(album.images.count) Perspectives")
+                                            .font(.system(size: 10, weight: .heavy))
+                                    }
+                                    .padding(.horizontal, 9)
+                                    .padding(.vertical, 5)
+                                    .background(AppTheme.primaryBrand.opacity(0.12))
+                                    .foregroundColor(AppTheme.primaryBrand)
+                                    .clipShape(Capsule())
                                 }
                                 
                                 ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 12) {
+                                    HStack(spacing: 14) {
                                         ForEach(album.images) { img in
                                             Button {
                                                 if let url = URL(string: APIService.baseURL + img.image_path) {
@@ -160,54 +195,82 @@ struct UserHairImagesView: View {
                                                 }
                                             } label: {
                                                 VStack(alignment: .center, spacing: 8) {
-                                                    AsyncImage(url: URL(string: APIService.baseURL + img.image_path)) { phase in
+                                                    CachedAsyncImage(url: URL(string: APIService.baseURL + img.image_path)) { phase in
                                                         if let image = phase.image {
                                                             image.resizable().scaledToFill()
-                                                                .frame(width: 140, height: 180).clipped().cornerRadius(12)
+                                                                .frame(width: 145, height: 185)
+                                                                .clipped()
+                                                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                                                .overlay(
+                                                                    Image(systemName: "arrow.up.left.and.arrow.down.right")
+                                                                        .font(.system(size: 11, weight: .bold))
+                                                                        .padding(5)
+                                                                        .background(.ultraThinMaterial)
+                                                                        .clipShape(Circle())
+                                                                        .foregroundColor(.white)
+                                                                        .padding(6),
+                                                                    alignment: .topTrailing
+                                                                )
                                                         } else if phase.error != nil {
-                                                            Color.red.opacity(0.1).frame(width: 140, height: 180).cornerRadius(12)
+                                                            Color.red.opacity(0.1).frame(width: 145, height: 185)
+                                                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                                                         } else {
                                                             ZStack {
-                                                                RoundedRectangle(cornerRadius: 12)
-                                                                    .fill(Color.white.opacity(0.1)).frame(width: 140, height: 180)
-                                                                ProgressView()
+                                                                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                                                    .fill(Color.white.opacity(0.2))
+                                                                    .frame(width: 145, height: 185)
+                                                                ProgressView().tint(AppTheme.primaryBrand)
                                                             }
                                                         }
                                                     }
-                                                    Text(img.view_type).font(.caption.bold()).foregroundColor(AppTheme.titleText)
+                                                    
+                                                    Text(img.view_type)
+                                                        .font(.caption.weight(.bold))
+                                                        .foregroundColor(AppTheme.titleText)
                                                 }
                                             }
                                         }
                                     }
+                                    .padding(.vertical, 2)
                                 }
                                 
                                 // Show doctor remarks if any exist for this album
                                 let remarks = album.images.compactMap { $0.doctor_remark }.filter { !$0.isEmpty }
                                 if !remarks.isEmpty {
                                     VStack(alignment: .leading, spacing: 6) {
-                                        Label("Expert Feedback (from latest view)", systemImage: "stethoscope")
-                                            .font(.subheadline.bold()).foregroundColor(AppTheme.titleText)
+                                        Label("Expert Feedback", systemImage: "sparkles")
+                                            .font(.caption.bold())
+                                            .foregroundColor(AppTheme.primaryBrand)
                                         Text(remarks.last ?? "")
-                                            .padding(10).frame(maxWidth: .infinity, alignment: .leading)
-                                            .background(Color.blue.opacity(0.08)).cornerRadius(12)
+                                            .font(.caption)
+                                            .padding(10)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .background(AppTheme.primaryBrand.opacity(0.08))
+                                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                                             .foregroundColor(AppTheme.titleText)
                                     }
                                 } else {
-                                    Label("Awaiting expert review", systemImage: "hourglass")
-                                        .font(.caption).foregroundColor(.orange)
+                                    HStack(spacing: 5) {
+                                        Image(systemName: "hourglass")
+                                        Text("Awaiting specialist review")
+                                    }
+                                    .font(.caption)
+                                    .foregroundColor(AppTheme.amberWarm)
                                 }
                             }
                         }
-                        .opacity(animate ? 1 : 0).offset(y: animate ? 0 : 25)
-                        .animation(.easeOut(duration: 0.7), value: animate)
+                        .opacity(animate ? 1 : 0)
+                        .offset(y: animate ? 0 : 20)
+                        .animation(.easeOut(duration: 0.65), value: animate)
                     }
 
                     Spacer(minLength: 40)
                 }
-                .padding()
+                .padding(.horizontal, 16)
                 .frame(maxWidth: AppTheme.maxContentWidth(sizeClass))
-                .frame(maxWidth: .infinity, alignment: .center)
+                .frame(maxWidth: .infinity, alignment: .top)
             }
+            .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

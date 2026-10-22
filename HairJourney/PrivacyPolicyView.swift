@@ -44,10 +44,10 @@ Your information is used to:
                     )
                     
                     policySection(
-                        title: "3. Hair Images & Medical Data",
+                        title: "3. Hair Images & Care Data",
                         text: """
-Images and quiz results you upload are shared only with registered experts within the app for professional review.  
-We do not sell or publicly share your medical or personal data.
+Images and quiz results you upload are shared only with registered specialists within the app for routine review.  
+We do not sell or publicly share your wellness or personal data.
 """
                     )
                     

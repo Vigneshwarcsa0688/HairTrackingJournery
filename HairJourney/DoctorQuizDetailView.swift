@@ -79,63 +79,155 @@ struct DoctorQuizDetailView: View {
     }
     
     var body: some View {
-        ScrollView {
-            if let r = report {
-                VStack(alignment: .leading, spacing: 10) {
-                    
-                    Text("Result: \(r.result_summary)")
-                        .font(.title3.bold())
-                    
-                    detailRow("Scalp Type", r.scalp_type)
-                    detailRow("Sleep Hours", r.sleep_hours)
-                    detailRow("Hair Fall Frequency", r.hair_fall_frequency)
-                    detailRow("Family History", r.family_history)
-                    detailRow("Stress Level", r.stress_level)
-                    detailRow("Diet", r.diet)
-                    detailRow("Deficiencies", r.deficiencies)
-                    detailRow("Hair Texture", r.hair_texture)
-                    detailRow("Sudden Thinning", r.sudden_thinning)
-                    detailRow("Dandruff", r.dandruff)
-                    detailRow("Styling Tools", r.styling_tools)
-                    detailRow("Scalp Pain", r.scalp_pain)
-                    
-                    Divider().padding(.vertical)
-                    
-                    Text("Doctor Remark")
-                        .font(.headline)
-                    
-                    TextEditor(text: $remark)
-                        .frame(height: 120)
-                        .border(Color.gray)
-                    
-                    Button("Save Remark") {
-                        submitRemark()
+        ZStack {
+            AppBackgroundView()
+            
+            ScrollView(showsIndicators: false) {
+                if let r = report {
+                    VStack(spacing: 20) {
+                        
+                        // Summary Card
+                        GlassCard(cornerRadius: 20, padding: 18) {
+                            HStack(spacing: 14) {
+                                ZStack {
+                                    Circle()
+                                        .fill(AppTheme.primaryBrand.opacity(0.12))
+                                        .frame(width: 48, height: 48)
+                                    Image(systemName: "doc.text.magnifyingglass")
+                                        .font(.system(size: 22))
+                                        .foregroundColor(AppTheme.primaryBrand)
+                                }
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Assessment Result")
+                                        .font(.caption)
+                                        .foregroundColor(AppTheme.bodyText)
+                                    Text(r.result_summary)
+                                        .font(.title3.bold())
+                                        .foregroundColor(AppTheme.titleText)
+                                }
+                                
+                                Spacer()
+                            }
+                        }
+                        
+                        // Responses Grid / Group
+                        GlassCard(cornerRadius: 22, padding: 18) {
+                            VStack(alignment: .leading, spacing: 14) {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "list.bullet.rectangle.portrait.fill")
+                                        .foregroundColor(AppTheme.primaryBrand)
+                                    Text("Member Responses")
+                                        .font(.headline)
+                                        .foregroundColor(AppTheme.titleText)
+                                }
+                                
+                                Divider().opacity(0.5)
+                                
+                                LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
+                                    detailCard("Scalp Type", r.scalp_type, icon: "drop.fill")
+                                    detailCard("Sleep Hours", r.sleep_hours, icon: "bed.double.fill")
+                                    detailCard("Hair Fall", r.hair_fall_frequency, icon: "arrow.down.right.circle.fill")
+                                    detailCard("Family History", r.family_history, icon: "person.2.fill")
+                                    detailCard("Stress Level", r.stress_level, icon: "bolt.heart.fill")
+                                    detailCard("Diet", r.diet, icon: "fork.knife")
+                                    detailCard("Deficiencies", r.deficiencies, icon: "cross.fill")
+                                    detailCard("Texture", r.hair_texture, icon: "sparkles")
+                                    detailCard("Thinning", r.sudden_thinning, icon: "chart.line.downtrend.xyaxis")
+                                    detailCard("Dandruff", r.dandruff, icon: "snowflake")
+                                    detailCard("Styling Tools", r.styling_tools, icon: "comb.fill")
+                                    detailCard("Scalp Pain", r.scalp_pain, icon: "exclamationmark.circle.fill")
+                                }
+                            }
+                        }
+                        
+                        // Expert Evaluation Section
+                        GlassCard(cornerRadius: 22, padding: 18) {
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "sparkles")
+                                        .foregroundColor(AppTheme.primaryBrand)
+                                    Text("Expert Assessment & Guidance")
+                                        .font(.headline)
+                                        .foregroundColor(AppTheme.titleText)
+                                }
+                                
+                                TextEditor(text: $remark)
+                                    .frame(minHeight: 110)
+                                    .padding(10)
+                                    .background(Color.white.opacity(0.7))
+                                    .cornerRadius(12)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                                    )
+                                    .foregroundColor(AppTheme.titleText)
+                                
+                                if !message.isEmpty {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "checkmark.circle.fill")
+                                        Text(message)
+                                    }
+                                    .font(.caption.bold())
+                                    .foregroundColor(.green)
+                                    .transition(.opacity)
+                                }
+                                
+                                Button {
+                                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                                    submitRemark()
+                                } label: {
+                                    Text("Save Remark")
+                                }
+                                .buttonStyle(PrimaryButtonStyle())
+                                .padding(.top, 4)
+                            }
+                        }
+                        
+                        Spacer(minLength: 40)
                     }
-                    .buttonStyle(.borderedProminent)
-                    
-                    Text(message)
-                        .foregroundColor(.green)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                } else {
+                    VStack(spacing: 12) {
+                        ProgressView().tint(AppTheme.primaryBrand)
+                        Text("Loading report...")
+                            .font(.caption)
+                            .foregroundColor(AppTheme.bodyText)
+                    }
+                    .padding(.top, 80)
                 }
-                .padding()
-            } else {
-                ProgressView("Loading report...")
             }
         }
         .navigationTitle("Quiz Review")
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear { fetchDetail() }
     }
     
-    func detailRow(_ title: String, _ value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.caption)
-                .foregroundColor(AppTheme.secondaryText)            
+    func detailCard(_ title: String, _ value: String, icon: String) -> some View {
+        VStack(alignment: .leading, spacing: 5) {
+            HStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.system(size: 10))
+                    .foregroundColor(AppTheme.primaryBrand)
+                Text(title)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(AppTheme.bodyText)
+                    .lineLimit(1)
+            }
             Text(value)
-                .padding(8)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.blue.opacity(0.1))
-                .cornerRadius(8)
+                .font(.system(size: 13, weight: .bold))
+                .foregroundColor(AppTheme.titleText)
+                .lineLimit(2)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .background(Color.white.opacity(0.6))
+        .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.black.opacity(0.04), lineWidth: 1)
+        )
     }
 }
 

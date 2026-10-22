@@ -16,6 +16,8 @@ struct DoctorHairImageDetailView: View {
         guard let url = URL(string: APIService.baseURL + "add_image_remark.php"),
               let id = Int(imageId) else { return }
         
+        DoctorHairImagesManager.shared.updateRemark(imageId: imageId, remark: existingRemark)
+        
         let body = RemarkReq(image_id: id, doctor_remark: existingRemark)
         
         var request = URLRequest(url: url)
@@ -32,24 +34,28 @@ struct DoctorHairImageDetailView: View {
     
     var body: some View {
         ZStack {
-            AppTheme.gradient.ignoresSafeArea()
+            AppBackgroundView()
             
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 22) {
+                VStack(spacing: 20) {
                     
-                    // MARK: Hair Image Card
-                    GlassCard {
-                        AsyncImage(url: URL(string: APIService.baseURL + imageURL)) { image in
+                    // Hair Image Card
+                    GlassCard(cornerRadius: 24, padding: 16) {
+                        CachedAsyncImage(url: URL(string: APIService.baseURL + imageURL)) { image in
                             image
                                 .resizable()
                                 .scaledToFit()
                                 .cornerRadius(16)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .stroke(Color.black.opacity(0.06), lineWidth: 1)
+                                )
                         } placeholder: {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color.white.opacity(0.1))
-                                    .frame(height: 220)
-                                ProgressView()
+                                    .fill(Color.black.opacity(0.06))
+                                    .frame(height: 240)
+                                ProgressView().tint(AppTheme.primaryBrand)
                             }
                         }
                     }
@@ -57,60 +63,55 @@ struct DoctorHairImageDetailView: View {
                     .offset(y: animate ? 0 : -20)
                     .animation(.easeOut(duration: 0.6), value: animate)
                     
-                    // MARK: Doctor Remark Section
-                    GlassCard {
-                        VStack(alignment: .leading, spacing: 10) {
-                            HStack {
-                                Image(systemName: "stethoscope")
-                                Text("Doctor Evaluation")
+                    // Expert Remark Section
+                    GlassCard(cornerRadius: 22, padding: 18) {
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack(spacing: 8) {
+                                Image(systemName: "sparkles")
+                                    .foregroundColor(AppTheme.primaryBrand)
+                                Text("Expert Evaluation & Guidance")
                                     .font(.headline)
+                                    .foregroundColor(AppTheme.titleText)
                             }
-                            .foregroundColor(AppTheme.titleText)
-
                             
                             TextEditor(text: $existingRemark)
-                                .frame(height: 140)
+                                .frame(minHeight: 120)
                                 .padding(10)
-                                .background(Color.white.opacity(0.12))
+                                .background(Color.white.opacity(0.7))
                                 .cornerRadius(12)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                                )
                                 .foregroundColor(AppTheme.titleText)
-
+                            
+                            if !message.isEmpty {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                    Text(message)
+                                }
+                                .font(.caption.bold())
+                                .foregroundColor(.green)
+                                .transition(.opacity)
+                            }
+                            
+                            Button(action: {
+                                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                                submitRemark()
+                            }) {
+                                Text("Save Expert Remark")
+                            }
+                            .buttonStyle(PrimaryButtonStyle())
+                            .padding(.top, 4)
                         }
                     }
                     .opacity(animate ? 1 : 0)
                     .animation(.easeOut(duration: 0.7), value: animate)
                     
-                    // MARK: Save Button
-                    Button(action: submitRemark) {
-                        HStack {
-                            Image(systemName: "checkmark.seal.fill")
-                            Text("Save Medical Remark")
-                                .fontWeight(.semibold)
-                        }
-                        .foregroundColor(AppTheme.titleText)
-
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(
-                            LinearGradient(colors: [.green, .mint],
-                                           startPoint: .leading,
-                                           endPoint: .trailing)
-                        )
-                        .cornerRadius(14)
-                        .shadow(color: .green.opacity(0.4), radius: 8, x: 0, y: 4)
-                    }
-                    .padding(.horizontal, 4)
-                    
-                    if !message.isEmpty {
-                        Text(message)
-                            .foregroundColor(.green)
-                            .font(.subheadline)
-                            .padding(.top, 6)
-                    }
-                    
                     Spacer(minLength: 40)
                 }
-                .padding()
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
             }
         }
         .navigationTitle("Image Review")

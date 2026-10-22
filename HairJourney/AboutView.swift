@@ -3,18 +3,15 @@ import SwiftUI
 struct AboutView: View {
     var body: some View {
         ZStack {
-            AppTheme.gradient.ignoresSafeArea()
+            AppBackgroundView()
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 24) {
                     
                     // MARK: - Header
                     VStack(spacing: 16) {
-                        Image(systemName: "leaf.circle.fill")
-                            .font(.system(size: 70))
-                            .foregroundStyle(.white, AppTheme.premiumAccentGradient)
+                        HairJourneyLogoView(size: 78, showGlow: true)
                             .padding(.top, 20)
-                            .shadow(color: AppTheme.accent.opacity(0.3), radius: 10, y: 5)
                         
                         Text("HairJourney")
                             .font(.largeTitle.bold())
@@ -32,7 +29,7 @@ struct AboutView: View {
                                 .font(.title3.bold())
                                 .foregroundColor(AppTheme.titleText)
                             
-                            Text("HairJourney is a comprehensive tracking application designed to help users monitor their hair health and routines, while facilitating communication with clinical advisors.")
+                            Text("HairJourney is a comprehensive tracking application designed to help members monitor their hair wellness routines, while facilitating consultation with hair care experts.")
                                 .font(.subheadline)
                                 .foregroundColor(AppTheme.bodyText)
                                 .lineSpacing(4)
@@ -47,28 +44,28 @@ struct AboutView: View {
                                 .font(.title3.bold())
                                 .foregroundColor(AppTheme.titleText)
                             
-                            featureRow(icon: "camera.viewfinder", title: "Clinical Photography", desc: "Upload multi-angle photos of scalp progress.")
-                            featureRow(icon: "list.clipboard.fill", title: "Hair Quizzes", desc: "Evaluate your hair health using clinical scaling patterns.")
-                            featureRow(icon: "pills.fill", title: "Routine Management", desc: "Log and track the daily usage of designated hair serums.")
-                            featureRow(icon: "stethoscope", title: "Clinical Collaboration", desc: "Connect with medical professionals for feedback.")
+                            featureRow(icon: "camera.viewfinder", title: "Progress Photography", desc: "Upload multi-angle photos of scalp and hair progress.")
+                            featureRow(icon: "list.clipboard.fill", title: "Hair Assessments", desc: "Evaluate your hair health using structured assessment patterns.")
+                            featureRow(icon: "sparkles", title: "Routine Management", desc: "Log and track the daily usage of designated hair serums.")
+                            featureRow(icon: "person.badge.shield.checkmark.fill", title: "Expert Collaboration", desc: "Connect with hair care experts for routine guidance.")
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     
-                    // MARK: - Medical Disclaimer
+                    // MARK: - Health Disclaimer
                     GlassCard {
                         VStack(alignment: .center, spacing: 14) {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .font(.largeTitle)
                                 .foregroundColor(.orange)
                             
-                            Text("Medical Disclaimer")
+                            Text("Academic Student Thesis Project")
                                 .font(.headline.bold())
                                 .foregroundColor(AppTheme.titleText)
                             
-                            Text("This application is not a medical app.\n\nIt is strictly an educational application developed by students of SIMATS Institute.\n\nThe content, features, and functionality provided are not intended to be a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.")
+                            Text("HairJourney is an academic final-year student thesis project developed for educational wellness and hair care habit tracking.\n\nAll assessments, tracking features, and care specialist guidance provided are strictly for personal cosmetic tracking and wellness education. This app does not provide clinical medical diagnosis, clinical treatment, or medical prescriptions. Always seek the advice of a licensed physician for any medical concerns.")
                                 .font(.caption)
-                                .foregroundColor(AppTheme.error)
+                                .foregroundColor(AppTheme.bodyText)
                                 .multilineTextAlignment(.center)
                                 .lineSpacing(4)
                         }

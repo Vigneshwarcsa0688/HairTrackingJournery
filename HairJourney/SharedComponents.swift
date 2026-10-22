@@ -101,3 +101,99 @@ struct ViewAngleSelector: View {
         }
     }
 }
+
+// MARK: - Section Header Component
+struct SectionHeaderView: View {
+    var title: String
+    var subtitle: String? = nil
+    var icon: String? = nil
+    var actionTitle: String? = nil
+    var action: (() -> Void)? = nil
+
+    var body: some View {
+        HStack(alignment: .bottom) {
+            VStack(alignment: .leading, spacing: 3) {
+                if let subtitle = subtitle {
+                    Text(subtitle.uppercased())
+                        .font(.system(size: 11, weight: .bold))
+                        .tracking(1.2)
+                        .foregroundColor(AppTheme.primaryBrand)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.85)
+                }
+                HStack(spacing: 6) {
+                    if let icon = icon {
+                        Image(systemName: icon)
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundColor(AppTheme.primaryBrand)
+                    }
+                    Text(title)
+                        .font(.title3.bold())
+                        .foregroundColor(AppTheme.titleText)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                }
+            }
+            Spacer()
+            if let actionTitle = actionTitle, let action = action {
+                Button(action: action) {
+                    Text(actionTitle)
+                        .font(.caption.bold())
+                        .foregroundColor(AppTheme.primaryBrand)
+                }
+            }
+        }
+        .padding(.horizontal, 4)
+        .padding(.top, 4)
+    }
+}
+
+// MARK: - Status Badge Component
+struct AppStatusBadge: View {
+    let status: String
+    
+    var color: Color {
+        switch status.lowercased() {
+        case "approved", "completed", "active", "target met":
+            return AppTheme.emeraldMint
+        case "rejected", "missed", "cancelled":
+            return AppTheme.coralRose
+        case "pending", "awaiting review", "partial":
+            return AppTheme.amberWarm
+        default:
+            return AppTheme.primaryBrand
+        }
+    }
+    
+    var icon: String {
+        switch status.lowercased() {
+        case "approved", "completed", "active", "target met":
+            return "checkmark.circle.fill"
+        case "rejected", "missed", "cancelled":
+            return "xmark.circle.fill"
+        case "pending", "awaiting review", "partial":
+            return "clock.fill"
+        default:
+            return "info.circle.fill"
+        }
+    }
+    
+    var body: some View {
+        HStack(spacing: 4) {
+            Image(systemName: icon)
+                .font(.system(size: 10, weight: .semibold))
+            Text(status)
+                .font(.system(size: 11, weight: .bold))
+        }
+        .padding(.horizontal, 9)
+        .padding(.vertical, 5)
+        .background(color.opacity(0.14))
+        .foregroundColor(color)
+        .clipShape(Capsule())
+        .overlay(
+            Capsule()
+                .stroke(color.opacity(0.3), lineWidth: 1)
+        )
+    }
+}
+

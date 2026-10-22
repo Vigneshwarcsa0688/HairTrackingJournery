@@ -5,7 +5,7 @@ struct AboutUsView: View {
     
     var body: some View {
         ZStack {
-            AppTheme.gradient.ignoresSafeArea()
+            AppBackgroundView()
             
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 22) {
@@ -26,32 +26,37 @@ struct AboutUsView: View {
                     
                     infoSection(
                         title: "Our Mission",
-                        text: "Hair Journey helps people understand, track, and improve their hair health using technology and expert medical guidance."
+                        text: "Hair Journey helps members understand, track, and improve their hair wellness routines using technology and specialist guidance."
+                    )
+                    
+                    infoSection(
+                        title: "Academic Thesis Project",
+                        text: "Hair Journey is an academic student thesis project developed for educational habit adherence and wellness tracking. It does not provide medical diagnoses, clinical treatment, or prescriptions."
                     )
                     
                     infoSection(
                         title: "What We Do",
                         text: """
 • Provide hair health quizzes and assessments  
-• Allow users to track hair growth with photos  
-• Connect users with qualified doctors  
-• Offer professional feedback and recommendations
+• Allow members to track hair growth with photos  
+• Connect members with qualified hair care experts  
+• Offer personalized feedback and routine recommendations
 """
                     )
                     
                     infoSection(
                         title: "Why Hair Journey?",
-                        text: "Hair concerns can affect confidence and well-being. Our goal is to make professional hair care guidance accessible, convenient, and personalized."
+                        text: "Hair concerns can affect confidence and well-being. Our goal is to make personalized hair care guidance accessible, convenient, and empowering."
                     )
                     
                     infoSection(
-                        title: "Medical Collaboration",
-                        text: "We work with licensed doctors who review reports and hair images to provide safe and professional recommendations."
+                        title: "Specialist Collaboration",
+                        text: "We work with experienced hair care specialists who review routine reports and scalp photos to provide safe and personalized recommendations."
                     )
                     
                     infoSection(
                         title: "Your Privacy Matters",
-                        text: "We prioritize data protection and never sell your personal or medical information."
+                        text: "We prioritize data protection and never sell your personal information."
                     )
                     
                     infoSection(

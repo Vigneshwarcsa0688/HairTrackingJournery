@@ -53,6 +53,11 @@ class AuthViewModel: ObservableObject {
                         if let encoded = try? JSONEncoder().encode(loggedUser) {
                             UserDefaults.standard.set(encoded, forKey: "saved_session_user")
                         }
+                        
+                        // Sync Core Data specialization for expert
+                        if let spec = CoreDataExpertManager.shared.getSpecialization(email: loggedUser.email) {
+                            ExpertSpecializationManager.shared.setSpecialization(for: loggedUser.id, specialization: spec)
+                        }
                     } else {
                         self.errorMessage = "Invalid credentials"
                     }

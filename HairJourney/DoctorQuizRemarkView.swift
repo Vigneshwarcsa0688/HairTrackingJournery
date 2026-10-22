@@ -37,19 +37,44 @@ struct DoctorQuizRemarkView: View {
     }
     
     var body: some View {
-        VStack(spacing: 15) {
-            TextEditor(text: $remark)
-                .frame(height: 150)
-                .border(Color.gray)
+        ZStack {
+            AppBackgroundView()
             
-            Button("Submit Remark") {
-                submitRemark()
+            VStack(spacing: 20) {
+                GlassCard {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Label("Specialist Notes", systemImage: "pencil.line")
+                            .font(.headline)
+                            .foregroundColor(AppTheme.titleText)
+                        
+                        TextEditor(text: $remark)
+                            .frame(height: 160)
+                            .padding(10)
+                            .background(Color.white.opacity(0.12))
+                            .cornerRadius(12)
+                            .foregroundColor(AppTheme.titleText)
+                    }
+                }
+                
+                Button {
+                    submitRemark()
+                } label: {
+                    Text("Submit Guidance")
+                }
+                .buttonStyle(PrimaryButtonStyle())
+                
+                if !message.isEmpty {
+                    Text(message)
+                        .font(.subheadline.bold())
+                        .foregroundColor(AppTheme.emeraldMint)
+                        .padding(.top, 8)
+                }
+                
+                Spacer()
             }
-            .buttonStyle(.borderedProminent)
-            
-            Text(message).foregroundColor(.green)
+            .padding(20)
         }
-        .padding()
-        .navigationTitle("Doctor Remark")
+        .navigationTitle("Expert Guidance")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
