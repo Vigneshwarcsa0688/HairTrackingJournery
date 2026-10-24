@@ -27,8 +27,8 @@ struct PrivacyPolicyView: View {
                     policySection(
                         title: "1. Information We Collect",
                         text: """
-We collect basic personal information such as your name, email address, phone number, date of birth, and location when you create an account.  
-We also collect health-related inputs like quiz responses, hair images, and appointment history to provide personalized services.
+We collect necessary account information such as your name, email address, and date of birth when you create an account. Phone number and location are entirely optional and not required to use the app.  
+We also collect wellness-related inputs like optional quiz responses, progress hair images, and appointment history to support your personal hair care tracking.
 """
                     )
                     

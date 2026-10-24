@@ -151,7 +151,7 @@ struct QuizReportDetailView: View {
                                 .foregroundColor(AppTheme.primaryBrand)
                                 .padding(.top, 1)
                             
-                            Text("HairJourney is an academic thesis project developed for educational and wellness habit tracking. It does not provide medical diagnosis, treatment, or clinical prescriptions.")
+                            Text("HairJourney is an academic thesis project developed for educational and wellness habit tracking. It does not provide medical diagnosis, treatment, or clinical prescriptions. Always seek a doctor's advice in addition to using this app and before making any medical decisions.")
                                 .font(.caption2)
                                 .foregroundColor(AppTheme.bodyText(0.8))
                                 .lineSpacing(2)

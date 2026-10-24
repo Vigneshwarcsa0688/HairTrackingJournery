@@ -58,6 +58,12 @@ struct HairAIEngine {
             • **Leave-In Time:** Allow at least 4 hours before washing or rinsing.
             
             💡 *Tip: Log your daily doses in the **Serum Calendar** to maintain your streak!*
+            
+            📚 **Medical Citations & Sources:**
+            • [American Academy of Dermatology (AAD) - Hair Loss Treatments](https://www.aad.org/public/diseases/hair-loss/treatment/diagnosis-treat)
+            • [National Library of Medicine (NIH / PubMed) - Topical Minoxidil Mechanism](https://pubmed.ncbi.nlm.nih.gov/31403367/)
+            
+            ⚠️ *Disclaimer: Student thesis tool for wellness tracking. Always seek a doctor's advice in addition to using this app and before making any medical decisions.*
             """
         }
         
@@ -70,7 +76,13 @@ struct HairAIEngine {
             • **Timeline:** This temporary shedding peak typically occurs between **weeks 2 to 6** of routine care.
             • **Do Not Panic:** Stopping treatment during this transition interrupts the growth cycle.
             
-            ✨ *If shedding persists past 8-10 weeks or is accompanied by burning or itching, consider booking a review with a hair care specialist.*
+            ✨ *If shedding persists past 8-10 weeks or is accompanied by burning or itching, consult a physician or dermatologist.*
+            
+            📚 **Medical Citations & Sources:**
+            • [American Academy of Dermatology - Hair Loss vs Shedding](https://www.aad.org/public/diseases/hair-loss/insider/shedding)
+            • [PubMed (NIH) - Telogen Effluvium Dynamics & Cycle](https://pubmed.ncbi.nlm.nih.gov/30064598/)
+            
+            ⚠️ *Disclaimer: Student thesis tool for wellness tracking. Always seek a doctor's advice in addition to using this app and before making any medical decisions.*
             """
         }
         
@@ -85,7 +97,11 @@ struct HairAIEngine {
             • **Dry, Styled Hair:** Always photograph dry hair styled identically (e.g. parted down the middle).
             • **Interval:** Monthly photo milestones (every 30 days) provide the clearest view of density changes.
             
-            ✨ *Check out the **Hair Progress Tracker** to compare side-by-side growth photos!*
+            📚 **Medical Citations & Sources:**
+            • [International Society of Hair Restoration Surgery (ISHRS) - Photography Guidelines](https://ishrs.org/)
+            • [PubMed (NIH) - Standardized Clinical Scalp Imaging](https://pubmed.ncbi.nlm.nih.gov/22409748/)
+            
+            ⚠️ *Disclaimer: Student thesis tool for wellness tracking. Always seek a doctor's advice in addition to using this app and before making any medical decisions.*
             """
         }
         
@@ -97,6 +113,12 @@ struct HairAIEngine {
             • Daily **4-minute fingertip scalp massages** encourage subcutaneous blood microcirculation, delivering essential oxygen and micronutrients directly to dermal papilla cells.
             • Use slow, circular kneading motions with moderate pressure.
             • If using a dermaroller (0.5mm), sanitize thoroughly with 70% alcohol before and after each session, and wait at least 12-24 hours before applying topical serums.
+            
+            📚 **Medical Citations & Sources:**
+            • [Journal of Dermatology / PubMed (NIH) - Scalp Massage Study](https://pubmed.ncbi.nlm.nih.gov/26904154/)
+            • [American Academy of Dermatology - Healthy Scalp Care](https://www.aad.org/public/everyday-care/hair-scalp-care/hair/healthy-hair-tips)
+            
+            ⚠️ *Disclaimer: Student thesis tool for wellness tracking. Always seek a doctor's advice in addition to using this app and before making any medical decisions.*
             """
         }
         
@@ -108,6 +130,12 @@ struct HairAIEngine {
             • Differentiate between **dry scalp** (small white flakes caused by cold weather or harsh products) and **seborrheic dermatitis/dandruff** (yellowish oily flakes associated with Malassezia yeast).
             • Consider rotating an anti-fungal care wash (like 1-2% Ketoconazole or Zinc Pyrithione) 2-3 times per week.
             • Avoid hot water rinses which strip natural sebum and trigger rebound oil production.
+            
+            📚 **Medical Citations & Sources:**
+            • [Mayo Clinic - Dandruff: Diagnosis and Treatment](https://www.mayoclinic.org/diseases-conditions/dandruff/diagnosis-treatment/drc-20353854)
+            • [PubMed (NIH) - Ketoconazole & Zinc Pyrithione in Seborrheic Dermatitis](https://pubmed.ncbi.nlm.nih.gov/12444332/)
+            
+            ⚠️ *Disclaimer: Student thesis tool for wellness tracking. Always seek a doctor's advice in addition to using this app and before making any medical decisions.*
             """
         }
         
@@ -121,6 +149,12 @@ struct HairAIEngine {
             • **Ferritin & Iron:** Spinach, legumes, pumpkin seeds (low iron is a common trigger for telogen effluvium).
             • **Zinc & Omega-3:** Walnuts, chia seeds, salmon to regulate sebum and follicle cell turnover.
             • **Biotin & Vitamin D3:** Essential co-factors for structural hair synthesis.
+            
+            📚 **Medical Citations & Sources:**
+            • [Dermatology and Therapy / PubMed (NIH) - Micronutrients in Hair Loss](https://pubmed.ncbi.nlm.nih.gov/30547302/)
+            • [Harvard Health Publishing - Causes and Nutrition in Hair Loss](https://www.health.harvard.edu/staying-healthy/teasing-out-the-causes-of-hair-loss)
+            
+            ⚠️ *Disclaimer: Student thesis tool for wellness tracking. Always seek a doctor's advice in addition to using this app and before making any medical decisions.*
             """
         }
         
@@ -133,6 +167,12 @@ struct HairAIEngine {
             • Once completed, you receive a detailed score breakdown, tailored routine suggestions, and report sharing options.
             
             ✨ *Tap **Hair Growth Quiz** on your dashboard to evaluate your scalp health!*
+            
+            📚 **Medical Citations & Sources:**
+            • [British Association of Dermatologists - Hair Guidelines](https://www.bad.org.uk/)
+            • [American Academy of Dermatology - Evaluating Thinning Hair](https://www.aad.org/public/diseases/hair-loss)
+            
+            ⚠️ *Disclaimer: Student thesis tool for wellness tracking. Always seek a doctor's advice in addition to using this app and before making any medical decisions.*
             """
         }
         
@@ -145,7 +185,10 @@ struct HairAIEngine {
             • You can book consultation slots directly via the **Book Consultation** section. 📅
             • Track past advice and active care regimens in **My Consultations**. 💬
             
-            *Note: HairJourney is an academic thesis project for educational wellness tracking and does not provide clinical medical diagnosis.*
+            📚 **Medical Citations & Sources:**
+            • [American Academy of Dermatology - When to See a Dermatologist](https://www.aad.org/public/diseases/hair-loss)
+            
+            ⚠️ *Disclaimer: HairJourney is an academic thesis project for educational wellness tracking and does not provide clinical medical diagnoses or treatment advice. Always seek a doctor's advice in addition to using this app and before making any medical decisions.*
             """
         }
         
@@ -154,7 +197,11 @@ struct HairAIEngine {
             return """
             👋 Hello! I am your **Hair Journey AI Assistant** 🌿✨
             
-            I'm here to support your daily scalp care, track your hair regrowth photos, answer routine queries, and keep your streak strong! 🧴💆‍♂️
+            I'm an educational companion developed for an academic student thesis project to support your scalp care routine, track progress photos, and answer hair habit questions! 🧴💆‍♂️
+            
+            📚 You can tap **"Citations"** at the top of this screen anytime to view clinical dermatological sources and studies.
+            
+            ⚠️ *Reminder: Always seek a doctor's advice in addition to using this app and before making any medical decisions.*
             
             What would you like guidance on today? 💬
             """
@@ -172,7 +219,11 @@ struct HairAIEngine {
         • Stimulate scalp circulation with daily fingertip massages 💆‍♂️
         • Consult our verified hair care specialists if you experience irregular shedding ✨
         
-        *Feel free to ask more specific questions about serums, shedding phases, photo angles, or diet!*
+        📚 **Medical Citations & Sources:**
+        • [American Academy of Dermatology (AAD) - Hair Health Resources](https://www.aad.org/public/diseases/hair-loss)
+        • [National Library of Medicine (NIH) - Scalp & Follicle Biology](https://pubmed.ncbi.nlm.nih.gov/31403367/)
+        
+        ⚠️ *Disclaimer: Student thesis tool for wellness tracking. Always seek a doctor's advice in addition to using this app and before making any medical decisions.*
         """
     }
     
@@ -194,7 +245,7 @@ struct HairAIChatView: View {
     
     @State private var messages: [HairChatMessage] = [
         HairChatMessage(
-            text: "👋 Hello! I am your dedicated **Hair Journey AI Assistant** 🌿✨\n\nI can help you with your serum routines, photo progress tracking, scalp health tips, and hair care questions! How can I assist your hair journey today? 🧴💆‍♂️",
+            text: "👋 Hello! I am your dedicated **Hair Journey AI Assistant** 🌿✨\n\nI am an educational companion developed for an academic student thesis project to support your scalp care routine, track progress photos, and answer hair habit questions! 🧴💆‍♂️\n\n📚 Tap **Citations** in the header anytime to view peer-reviewed scientific and clinical sources.\n\n⚠️ *Medical Disclaimer: This app is for educational wellness tracking only and does not provide medical diagnoses or treatment advice. Always seek a doctor's advice in addition to using this app and before making any medical decisions.*",
             isUser: false
         )
     ]
@@ -203,6 +254,7 @@ struct HairAIChatView: View {
     @State private var isBotTyping: Bool = false
     @State private var quickPrompts: [String] = HairAIEngine.getRandomPrompts(count: 4)
     @State private var pulseOrb: Bool = false
+    @State private var showCitationsSheet: Bool = false
     
     var body: some View {
         ZStack {
@@ -257,6 +309,24 @@ struct HairAIChatView: View {
                     
                     Spacer()
                     
+                    // Citations Button
+                    Button {
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        showCitationsSheet = true
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "book.closed.fill")
+                                .font(.system(size: 11, weight: .bold))
+                            Text("Citations")
+                                .font(.system(size: 11, weight: .bold))
+                        }
+                        .foregroundColor(AppTheme.primaryBrand)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(AppTheme.primaryBrand.opacity(0.12))
+                        .clipShape(Capsule())
+                    }
+                    
                     // Close Sheet Button
                     Button {
                         UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -277,20 +347,41 @@ struct HairAIChatView: View {
                     alignment: .bottom
                 )
                 
-                // Academic Thesis Project Notice
-                HStack(spacing: 6) {
-                    Image(systemName: "info.circle.fill")
-                        .font(.system(size: 10))
-                        .foregroundColor(AppTheme.primaryBrand)
-                    Text("Educational thesis assistant • For wellness habit tracking, not medical diagnosis")
-                        .font(.system(size: 10, weight: .medium))
-                        .foregroundColor(AppTheme.bodyText(0.75))
-                        .lineLimit(1)
+                // Academic Thesis & Medical Disclaimer Banner
+                VStack(spacing: 3) {
+                    HStack(alignment: .top, spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundColor(.orange)
+                            .padding(.top, 1)
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Academic Student Thesis Project • Medical Disclaimer")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor(AppTheme.titleText)
+                            
+                            Text("This educational tool does NOT provide medical diagnoses or treatment advice. Always seek a doctor's advice in addition to using this app and before making any medical decisions.")
+                                .font(.system(size: 10))
+                                .foregroundColor(AppTheme.bodyText(0.85))
+                                .lineSpacing(2)
+                        }
+                        
+                        Spacer(minLength: 4)
+                        
+                        Button {
+                            showCitationsSheet = true
+                        } label: {
+                            Text("Sources")
+                                .font(.system(size: 10.5, weight: .bold))
+                                .foregroundColor(AppTheme.primaryBrand)
+                                .underline()
+                        }
+                    }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 4)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
                 .frame(maxWidth: .infinity)
-                .background(AppTheme.primaryBrand.opacity(0.06))
+                .background(Color.orange.opacity(0.09))
                 
                 // MARK: - Chat Messages Area
                 ScrollViewReader { proxy in
@@ -459,6 +550,9 @@ struct HairAIChatView: View {
                 }
             }
         }
+        .sheet(isPresented: $showCitationsSheet) {
+            MedicalCitationsSheetView()
+        }
         .onAppear {
             withAnimation(.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
                 pulseOrb = true
@@ -514,6 +608,7 @@ struct ChatBubbleView: View {
                 Text(LocalizedStringKey(message.text))
                     .font(.subheadline)
                     .foregroundColor(message.isUser ? .white : AppTheme.titleText)
+                    .tint(message.isUser ? .white : AppTheme.primaryBrand)
                     .lineSpacing(3)
                     .padding(.horizontal, 14)
                     .padding(.vertical, 11)
@@ -669,3 +764,179 @@ struct HairAIFloatingButton: View {
         }
     }
 }
+
+// MARK: - Dedicated Medical Citations & Research Sources Sheet
+struct MedicalCitationsSheetView: View {
+    @Environment(\.dismiss) private var dismiss
+    
+    struct CitationItem: Identifiable {
+        let id = UUID()
+        let title: String
+        let source: String
+        let details: String
+        let url: String
+        let badge: String
+    }
+    
+    let citations: [CitationItem] = [
+        CitationItem(
+            title: "Diagnosis and Treatment of Hair Loss in Adults",
+            source: "American Academy of Dermatology (AAD)",
+            details: "Clinical guidance on assessing shedding patterns, miniaturization, and validated topical regimens.",
+            url: "https://www.aad.org/public/diseases/hair-loss/treatment/diagnosis-treat",
+            badge: "Clinical Practice"
+        ),
+        CitationItem(
+            title: "Minoxidil and Its Use in Hair Disorders: A Review",
+            source: "National Library of Medicine (NIH / PubMed)",
+            details: "Comprehensive pharmacological analysis of topical follicular microcirculation and the hair growth cycle.",
+            url: "https://pubmed.ncbi.nlm.nih.gov/31403367/",
+            badge: "Peer-Reviewed Study"
+        ),
+        CitationItem(
+            title: "Standardized Scalp Massage Increases Hair Thickness",
+            source: "Journal of Dermatology / PubMed (NIH)",
+            details: "Investigation of localized mechanical stretching forces on human dermal papilla cells to improve thickness.",
+            url: "https://pubmed.ncbi.nlm.nih.gov/26904154/",
+            badge: "Clinical Research"
+        ),
+        CitationItem(
+            title: "Dandruff & Seborrheic Dermatitis: Diagnosis & Management",
+            source: "Mayo Clinic",
+            details: "Medical overview of Malassezia overgrowth, scalp microbiome care, and anti-fungal washing protocols.",
+            url: "https://www.mayoclinic.org/diseases-conditions/dandruff/diagnosis-treatment/drc-20353854",
+            badge: "Medical Consensus"
+        ),
+        CitationItem(
+            title: "The Role of Vitamins and Minerals in Hair Loss: A Review",
+            source: "Dermatology and Therapy / PubMed (NIH)",
+            details: "Meta-analysis on micronutrient roles including iron/ferritin, zinc, biotin, and amino acid synthesis in hair health.",
+            url: "https://pubmed.ncbi.nlm.nih.gov/30547302/",
+            badge: "Meta-Analysis"
+        ),
+        CitationItem(
+            title: "Telogen Effluvium and Regrowth Transition Timelines",
+            source: "American Academy of Dermatology (AAD)",
+            details: "Differentiating acute telogen shedding from permanent follicle miniaturization during initial routine adoption.",
+            url: "https://www.aad.org/public/diseases/hair-loss/insider/shedding",
+            badge: "Clinical Guidelines"
+        ),
+        CitationItem(
+            title: "Standardized Photography and Digital Imaging in Dermatology",
+            source: "International Society of Hair Restoration Surgery (ISHRS)",
+            details: "Best practice protocols for standardized angles, illumination, and reproducible progress comparison photos.",
+            url: "https://ishrs.org/",
+            badge: "Imaging Standard"
+        ),
+        CitationItem(
+            title: "Guidelines for the Management of Alopecia Areata & Telogen Effluvium",
+            source: "British Association of Dermatologists (BAD)",
+            details: "Evidence-based guidelines for evaluating non-scarring alopecia and patient assessment parameters.",
+            url: "https://www.bad.org.uk/",
+            badge: "Clinical Guidelines"
+        )
+    ]
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                AppBackgroundView()
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 16) {
+                        
+                        // Academic & Medical Disclaimer Callout
+                        HStack(alignment: .top, spacing: 12) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .font(.title3)
+                                .foregroundColor(.orange)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Student Thesis & Educational Project")
+                                    .font(.subheadline.weight(.bold))
+                                    .foregroundColor(AppTheme.titleText)
+                                Text("HairJourney is an academic final-year student thesis project. All information and AI responses are for educational wellness tracking only and do NOT constitute medical diagnoses or treatment advice. Always seek a doctor's advice in addition to using this app and before making any medical decisions.")
+                                    .font(.caption)
+                                    .foregroundColor(AppTheme.bodyText(0.85))
+                                    .lineSpacing(2)
+                            }
+                        }
+                        .padding()
+                        .background(Color.orange.opacity(0.1))
+                        .cornerRadius(14)
+                        
+                        Text("Peer-Reviewed Sources & References")
+                            .font(.headline.weight(.bold))
+                            .foregroundColor(AppTheme.titleText)
+                            .padding(.top, 4)
+                        
+                        Text("The AI assistant and assessment tools in HairJourney cite peer-reviewed literature, clinical studies, and medical dermatology consensus from the following reputable institutions:")
+                            .font(.caption)
+                            .foregroundColor(AppTheme.bodyText(0.8))
+                        
+                        // Citation Cards
+                        ForEach(citations) { item in
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Text(item.badge.uppercased())
+                                        .font(.system(size: 9, weight: .heavy))
+                                        .foregroundColor(AppTheme.primaryBrand)
+                                        .padding(.horizontal, 7)
+                                        .padding(.vertical, 3)
+                                        .background(AppTheme.primaryBrand.opacity(0.12))
+                                        .clipShape(Capsule())
+                                    
+                                    Spacer()
+                                    
+                                    if let url = URL(string: item.url) {
+                                        Link(destination: url) {
+                                            HStack(spacing: 4) {
+                                                Text("Open Source")
+                                                    .font(.system(size: 11, weight: .semibold))
+                                                Image(systemName: "arrow.up.right.square.fill")
+                                                    .font(.system(size: 11))
+                                            }
+                                            .foregroundColor(AppTheme.primaryBrand)
+                                        }
+                                    }
+                                }
+                                
+                                Text(item.title)
+                                    .font(.subheadline.weight(.bold))
+                                    .foregroundColor(AppTheme.titleText)
+                                
+                                Text(item.source)
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundColor(AppTheme.primaryBrand)
+                                
+                                Text(item.details)
+                                    .font(.caption2)
+                                    .foregroundColor(AppTheme.bodyText(0.8))
+                                    .lineSpacing(2)
+                            }
+                            .padding(14)
+                            .background(Color.white.opacity(0.85))
+                            .cornerRadius(14)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                            )
+                        }
+                    }
+                    .padding(18)
+                }
+            }
+            .navigationTitle("Medical Citations & Sources")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                    .fontWeight(.bold)
+                    .foregroundColor(AppTheme.primaryBrand)
+                }
+            }
+        }
+    }
+}
+

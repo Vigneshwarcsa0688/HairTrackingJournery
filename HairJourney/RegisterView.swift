@@ -68,15 +68,17 @@ struct RegisterView: View {
         return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: clean)
     }
     
-    // MARK: - Phone Validation (10 digits)
+    // MARK: - Phone Validation (Optional: valid if empty or 10 digits)
     func isValidPhone(_ phone: String) -> Bool {
         let digits = phone.filter { $0.isNumber }
+        if digits.isEmpty { return true }
         return digits.count == 10
     }
     
-    // MARK: - Place Validation
+    // MARK: - Place Validation (Optional: valid if empty or >= 2 chars)
     func isValidPlace(_ place: String) -> Bool {
         let clean = place.trimmingCharacters(in: .whitespacesAndNewlines)
+        if clean.isEmpty { return true }
         return clean.count >= 2
     }
     
@@ -116,16 +118,16 @@ struct RegisterView: View {
     var phoneErrorMessage: String? {
         guard hasSubmitted else { return nil }
         let digits = phone.filter { $0.isNumber }
-        if digits.isEmpty { return "Phone number is required" }
-        if digits.count != 10 { return "Phone number must be exactly 10 digits" }
+        if digits.isEmpty { return nil } // Optional
+        if digits.count != 10 { return "Phone number must be exactly 10 digits if provided" }
         return nil
     }
     
     var placeErrorMessage: String? {
         guard hasSubmitted else { return nil }
         let clean = place.trimmingCharacters(in: .whitespacesAndNewlines)
-        if clean.isEmpty { return "Location is required" }
-        if clean.count < 2 { return "Location must be at least 2 characters" }
+        if clean.isEmpty { return nil } // Optional
+        if clean.count < 2 { return "Location must be at least 2 characters if provided" }
         return nil
     }
     
@@ -439,8 +441,8 @@ struct RegisterView: View {
                                     UINotificationFeedbackGenerator().notificationOccurred(.error)
                                 }
                                 
-                                guard !trimmedName.isEmpty, !trimmedEmail.isEmpty, !cleanPhone.isEmpty, !trimmedPlace.isEmpty, !password.isEmpty, !confirmPassword.isEmpty else {
-                                    triggerUIError("All fields are required. Please fill in the missing information.")
+                                guard !trimmedName.isEmpty, !trimmedEmail.isEmpty, !password.isEmpty, !confirmPassword.isEmpty else {
+                                    triggerUIError("Please fill in all required fields (Name, Email, Password).")
                                     return
                                 }
                                 
@@ -459,14 +461,18 @@ struct RegisterView: View {
                                     return
                                 }
                                 
-                                guard cleanPhone.count == 10 else {
-                                    triggerUIError("Phone number must be exactly 10 digits.")
-                                    return
+                                if !cleanPhone.isEmpty {
+                                    guard cleanPhone.count == 10 else {
+                                        triggerUIError("Phone number must be exactly 10 digits if provided.")
+                                        return
+                                    }
                                 }
                                 
-                                guard isValidPlace(trimmedPlace) else {
-                                    triggerUIError("Location must be at least 2 characters.")
-                                    return
+                                if !trimmedPlace.isEmpty {
+                                    guard isValidPlace(trimmedPlace) else {
+                                        triggerUIError("Location must be at least 2 characters if provided.")
+                                        return
+                                    }
                                 }
                                 
                                 if isDoctor {
@@ -527,16 +533,9 @@ struct RegisterView: View {
                     .offset(y: animate ? 0 : 30)
                     .animation(.easeOut(duration: 0.7), value: animate)
                     
-                    // Legal footer
-                    Text("By creating an account, you agree to our Terms of Service and Privacy Policy.")
-                        .font(.caption2)
-                        .foregroundColor(AppTheme.bodyText.opacity(0.8))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 4)
-                        .padding(.bottom, 20)
-                        .minimumScaleFactor(0.85)
-                    
-                    Spacer(minLength: 30)
+                    // MARK: - Legal Agreement & Disclaimer Footer
+                    AuthLegalFooterView(showRegistrationAgreement: true)
+                        .padding(.top, 8)
                 }
                 .padding(.horizontal, 20)
                 .frame(maxWidth: sizeClass == .regular ? 560 : 440)

@@ -159,7 +159,7 @@ struct HairAnalysisReportView: View {
                             .foregroundColor(AppTheme.primaryBrand)
                             .padding(.top, 1)
                         
-                        Text("This student thesis project assessment provides educational wellness insights and habit tracking. It does not provide clinical medical diagnosis or treatment.")
+                        Text("This student thesis project assessment provides educational wellness insights and habit tracking. It does not provide clinical medical diagnosis or treatment. Always seek a doctor's advice in addition to using this app and before making any medical decisions.")
                             .font(.caption2)
                             .foregroundColor(AppTheme.bodyText(0.85))
                             .lineSpacing(2)

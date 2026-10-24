@@ -42,7 +42,7 @@ struct DoctorDashboardView: View {
                                     Text(specManager.getSpecialization(for: user.id))
                                         .font(.system(size: 11, weight: .bold))
                                         .lineLimit(1)
-                                        .minimumScaleFactor(0.85)
+                                        .minimumScaleFactor(0.85				)
                                 }
                                 .padding(.horizontal, 9)
                                 .padding(.vertical, 3.5)

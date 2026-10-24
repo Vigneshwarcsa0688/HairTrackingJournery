@@ -200,9 +200,11 @@ struct ForgotPasswordView: View {
                     }
                     .opacity(animate ? 1 : 0)
                     .offset(y: animate ? 0 : 30)
-                    .animation(.easeOut(duration: 0.7), value: animate)
-                    
-                    Spacer(minLength: 40)
+                    // MARK: - Legal Footer
+                    AuthLegalFooterView()
+                        .padding(.top, 10)
+                        .opacity(animate ? 1 : 0)
+                        .animation(.easeOut(duration: 0.8), value: animate)
                 }
                 .padding(.horizontal, 20)
             }

@@ -63,7 +63,7 @@ struct AboutView: View {
                                 .font(.headline.bold())
                                 .foregroundColor(AppTheme.titleText)
                             
-                            Text("HairJourney is an academic final-year student thesis project developed for educational wellness and hair care habit tracking.\n\nAll assessments, tracking features, and care specialist guidance provided are strictly for personal cosmetic tracking and wellness education. This app does not provide clinical medical diagnosis, clinical treatment, or medical prescriptions. Always seek the advice of a licensed physician for any medical concerns.")
+                            Text("HairJourney is an academic final-year student thesis project developed for educational wellness and hair care habit tracking.\n\nAll assessments, tracking features, and care specialist guidance provided are strictly for personal cosmetic tracking and wellness education. This app does not provide clinical medical diagnosis, clinical treatment, or medical prescriptions. Always seek a doctor's advice in addition to using this app and before making any medical decisions.")
                                 .font(.caption)
                                 .foregroundColor(AppTheme.bodyText)
                                 .multilineTextAlignment(.center)

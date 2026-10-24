@@ -542,7 +542,7 @@ struct PrescriptionsView: View {
                             .font(.system(size: 12))
                             .foregroundColor(AppTheme.primaryBrand)
                             .padding(.top, 1)
-                        Text("HairJourney Routine & Medicine Tracker is developed for educational habit adherence and wellness logging as part of an academic student thesis project.")
+                        Text("HairJourney Routine & Regimen Tracker is developed for educational habit adherence and wellness logging as part of an academic student thesis project. Always seek a doctor's advice in addition to using this app and before making any medical decisions.")
                             .font(.caption2)
                             .foregroundColor(AppTheme.bodyText(0.7))
                             .lineSpacing(2)

@@ -22,8 +22,7 @@ struct LoginView: View {
             AppBackgroundView()
             
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 24) {
-                    Spacer(minLength: 20)
+                VStack(spacing: 18) {
                     
                     // MARK: - Header & Brand
                     VStack(alignment: .leading, spacing: 14) {
@@ -207,30 +206,16 @@ struct LoginView: View {
                         .minimumScaleFactor(0.85)
                         .lineLimit(1)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.top, 4)
-                    .padding(.horizontal, 4)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.top, 2)
                     .opacity(animate ? 1 : 0)
                     .animation(.easeOut(duration: 0.8), value: animate)
                     
-                    Spacer(minLength: 20)
-                    
-                    // MARK: - Trust / Disclaimer Badge
-                    HStack(alignment: .top, spacing: 8) {
-                        Image(systemName: "shield.checkmark.fill")
-                            .foregroundColor(AppTheme.primaryBrand.opacity(0.8))
-                            .font(.system(size: 14))
-                        Text("Educational hair health tracking application developed by students of SIMATS Institute.")
-                            .font(.caption2)
-                            .foregroundColor(AppTheme.bodyText(0.7))
-                            .lineSpacing(2)
-                            .minimumScaleFactor(0.85)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 4)
-                    .padding(.bottom, 20)
-                    .opacity(animate ? 1 : 0)
-                    .animation(.easeOut(duration: 0.9), value: animate)
+                    // MARK: - Legal & Disclaimer Footer
+                    AuthLegalFooterView()
+                        .padding(.top, 4)
+                        .opacity(animate ? 1 : 0)
+                        .animation(.easeOut(duration: 0.9), value: animate)
                 }
                 .padding(.horizontal, 20)
                 .frame(maxWidth: sizeClass == .regular ? 480 : 420)

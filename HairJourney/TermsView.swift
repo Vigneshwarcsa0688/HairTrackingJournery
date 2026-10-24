@@ -31,7 +31,7 @@ struct TermsView: View {
                     
                     section(
                         title: "2. Academic Thesis Project & Wellness Disclaimer",
-                        text: "Hair Journey is an academic student thesis project developed for educational habit adherence and wellness tracking. It connects members with hair care specialists for routine advice. It does not provide clinical medical diagnosis or prescription treatments. Always consult a qualified physician or dermatologist for serious medical concerns."
+                        text: "Hair Journey is an academic student thesis project developed for educational habit adherence and wellness tracking. It connects members with hair care specialists for routine advice. It does not provide clinical medical diagnosis or prescription treatments. Always seek a doctor's advice in addition to using this app and before making any medical decisions."
                     )
                     
                     section(

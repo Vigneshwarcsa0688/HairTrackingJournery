@@ -197,3 +197,144 @@ struct AppStatusBadge: View {
     }
 }
 
+// MARK: - Symmetrical Auth Legal & Privacy Footer
+struct AuthLegalFooterView: View {
+    var showRegistrationAgreement: Bool = false
+    var showAboutLink: Bool = true
+    
+    @ObservedObject private var langManager = AppLanguageManager.shared
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            
+            // 1. Interactive Terms & Privacy Agreement (For Registration Screen)
+            if showRegistrationAgreement {
+                VStack(spacing: 4) {
+                    Text("By creating an account, you agree to our")
+                        .font(.caption2)
+                        .foregroundColor(AppTheme.bodyText(0.75))
+                        .multilineTextAlignment(.center)
+                    
+                    HStack(spacing: 6) {
+                        NavigationLink(destination: TermsView()) {
+                            HStack(spacing: 3) {
+                                Image(systemName: "doc.plaintext.fill")
+                                    .font(.system(size: 9))
+                                Text(langManager.text("terms_of_service"))
+                                    .font(.caption2.weight(.bold))
+                                    .underline()
+                            }
+                            .foregroundColor(AppTheme.primaryBrand)
+                        }
+                        
+                        Text("•")
+                            .font(.caption2)
+                            .foregroundColor(AppTheme.bodyText(0.35))
+                        
+                        NavigationLink(destination: PrivacyPolicyView()) {
+                            HStack(spacing: 3) {
+                                Image(systemName: "hand.raised.fill")
+                                    .font(.system(size: 9))
+                                Text(langManager.text("privacy_policy"))
+                                    .font(.caption2.weight(.bold))
+                                    .underline()
+                            }
+                            .foregroundColor(AppTheme.primaryBrand)
+                        }
+                    }
+                    .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.horizontal, 8)
+            } else {
+                // 2. Primary Navigation Legal Links (For Login & Login Choice Screens)
+                HStack(spacing: 12) {
+                    NavigationLink(destination: PrivacyPolicyView()) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "hand.raised.fill")
+                                .font(.system(size: 9))
+                            Text(langManager.text("privacy_policy"))
+                                .font(.caption2.weight(.semibold))
+                        }
+                        .foregroundColor(AppTheme.primaryBrand)
+                    }
+                    
+                    Text("•")
+                        .font(.caption2)
+                        .foregroundColor(AppTheme.bodyText(0.35))
+                    
+                    NavigationLink(destination: TermsView()) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "doc.text.fill")
+                                .font(.system(size: 9))
+                            Text(langManager.text("terms_of_service"))
+                                .font(.caption2.weight(.semibold))
+                        }
+                        .foregroundColor(AppTheme.primaryBrand)
+                    }
+                    
+                    if showAboutLink {
+                        Text("•")
+                            .font(.caption2)
+                            .foregroundColor(AppTheme.bodyText(0.35))
+                        
+                        NavigationLink(destination: AboutView()) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "info.circle.fill")
+                                    .font(.system(size: 9))
+                                Text(langManager.text("about"))
+                                    .font(.caption2.weight(.semibold))
+                            }
+                            .foregroundColor(AppTheme.primaryBrand)
+                        }
+                    }
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 6)
+                .background(Color.white.opacity(0.75))
+                .clipShape(Capsule())
+                .overlay(
+                    Capsule()
+                        .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                )
+                .shadow(color: Color.black.opacity(0.02), radius: 4, y: 1)
+                .frame(maxWidth: .infinity, alignment: .center)
+            }
+            
+            // 3. Academic & Medical Disclaimer Card
+            VStack(spacing: 3) {
+                HStack(spacing: 5) {
+                    Image(systemName: "shield.checkmark.fill")
+                        .font(.system(size: 10.5, weight: .bold))
+                        .foregroundColor(AppTheme.primaryBrand)
+                    
+                    Text("Academic Student Thesis Project")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(AppTheme.titleText)
+                }
+                
+                Text("Educational hair wellness & habit tracking platform developed by students of SIMATS Institute.\nAlways seek a doctor's advice in addition to using this app and before making any medical decisions.")
+                    .font(.system(size: 9.5))
+                    .foregroundColor(AppTheme.bodyText(0.75))
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(2)
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
+            .background(Color.white.opacity(0.6))
+            .cornerRadius(11)
+            .overlay(
+                RoundedRectangle(cornerRadius: 11)
+                    .stroke(Color.black.opacity(0.04), lineWidth: 1)
+            )
+        }
+        .padding(.horizontal, 4)
+        .padding(.top, 2)
+        .padding(.bottom, 12)
+        .frame(maxWidth: .infinity, alignment: .center)
+    }
+}
+
+
+

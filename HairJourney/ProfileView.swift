@@ -314,8 +314,8 @@ struct ProfileView: View {
                         GlassCard(cornerRadius: 22, paddingAmount: 18) {
                             VStack(spacing: 14) {
                                 profileField(icon: "person.fill", placeholder: "Full Name", text: $name)
-                                profileField(icon: "phone.fill", placeholder: "Phone Number", text: $phone)
-                                profileField(icon: "mappin.and.ellipse", placeholder: "City / Place", text: $place)
+                                profileField(icon: "phone.fill", placeholder: "Phone Number (Optional)", text: $phone)
+                                profileField(icon: "mappin.and.ellipse", placeholder: "City / Place (Optional)", text: $place)
                                 profileField(icon: "calendar", placeholder: "Birth Date (yyyy-mm-dd)", text: $dob)
                                 
                                 Button {

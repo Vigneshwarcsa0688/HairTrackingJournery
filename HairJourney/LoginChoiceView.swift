@@ -91,32 +91,11 @@ struct LoginChoiceView: View {
                     .offset(y: animate ? 0 : 25)
                     .animation(.easeOut(duration: 0.7), value: animate)
                     
-                    Spacer(minLength: 30)
-                    
                     // MARK: - Footer & Legal Links
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack(spacing: 6) {
-                            NavigationLink(langManager.text("privacy_policy"), destination: PrivacyPolicyView())
-                            Text("•")
-                            NavigationLink(langManager.text("terms_of_service"), destination: TermsView())
-                            Text("•")
-                            NavigationLink(langManager.text("about"), destination: AboutView())
-                        }
-                        .font(.caption.weight(.medium))
-                        .foregroundColor(AppTheme.primaryBrand)
-                        .minimumScaleFactor(0.8)
-                        .lineLimit(1)
-                        
-                        Text("Educational hair care & wellness platform developed by SIMATS Institute")
-                            .font(.system(size: 11))
-                            .foregroundColor(AppTheme.bodyText(0.6))
-                            .minimumScaleFactor(0.85)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 4)
-                    .padding(.bottom, 20)
-                    .opacity(animate ? 1 : 0)
-                    .animation(.easeIn(duration: 0.8), value: animate)
+                    AuthLegalFooterView()
+                        .padding(.top, 10)
+                        .opacity(animate ? 1 : 0)
+                        .animation(.easeIn(duration: 0.8), value: animate)
                 }
                 .padding(.horizontal, 20)
                 .frame(maxWidth: AppTheme.maxContentWidth(sizeClass))
